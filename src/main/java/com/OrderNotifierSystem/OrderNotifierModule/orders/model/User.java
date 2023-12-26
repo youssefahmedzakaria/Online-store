@@ -1,19 +1,18 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.model;
 import java.util.*;
-public class Users {
+public class User {
     private String email;
-
     private String username;
     private String password;
     private double balance;
 
-    public Users(String email,String username, String password) {
+    public User(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
     }
 
-    public Users() {
+    public User() {
     }
 
     public double getBalance() {

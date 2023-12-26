@@ -9,16 +9,16 @@ public class ProductBSL {
 private ArrayList<Product> products = new ArrayList<Product>();
 
     public ProductBSL() {
-        products.add(new Product("1", "Apple", "Apple", "Fruit", 10.0, 100));
-        products.add(new Product("2", "Orange", "Orange", "Fruit", 20.0, 100));
-        products.add(new Product("3", "Mango", "Mango", "Fruit", 30.0, 100));
-        products.add(new Product("4", "Banana", "Banana", "Fruit", 40.0, 100));
-        products.add(new Product("5", "Pineapple", "Pineapple", "Fruit", 50.0, 100));
-        products.add(new Product("6", "Grapes", "Grapes", "Fruit", 60.0, 100));
-        products.add(new Product("7", "Strawberry", "Strawberry", "Fruit", 70.0, 100));
-        products.add(new Product("8", "Watermelon", "Watermelon", "Fruit", 80.0, 100));
-        products.add(new Product("9", "Papaya", "Papaya", "Fruit", 90.0, 100));
-        products.add(new Product("10", "Guava", "Guava", "Fruit", 100.0, 100));
+        products.add(new Product("1", "Apple", "المعلم زكريا", "Fruit", 10.0, 100));
+        products.add(new Product("2", "Orange", "المعلم زكريا", "Fruit", 20.0, 100));
+        products.add(new Product("3", "Mango", "المعلم زكريا", "Fruit", 30.0, 100));
+        products.add(new Product("4", "Banana", "المعلم زكريا", "Fruit", 40.0, 100));
+        products.add(new Product("5", "Pineapple", "المعلم طارق العتر", "Fruit", 50.0, 100));
+        products.add(new Product("6", "Grapes", "المعلم طارق العتر", "Fruit", 60.0, 100));
+        products.add(new Product("7", "Strawberry", "المعلم طارق العتر", "Fruit", 70.0, 100));
+        products.add(new Product("8", "Watermelon", "المعلمة مرام", "Fruit", 80.0, 100));
+        products.add(new Product("9", "Papaya", "المعلمة مرام", "Fruit", 90.0, 100));
+        products.add(new Product("10", "Guava", "المعلمة مرام", "Fruit", 100.0, 100));
     }
 
     public ArrayList<Product> getProducts() {

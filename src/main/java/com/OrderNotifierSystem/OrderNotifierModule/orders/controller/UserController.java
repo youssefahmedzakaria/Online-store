@@ -1,13 +1,12 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Response;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Users;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.UsersBSL;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 public class UserController {
     private UsersBSL usersBSL;
 
@@ -16,7 +15,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public Response addPerson(@RequestBody Users p) {
+    public Response addPerson(@RequestBody User p) {
         System.out.println("in add person"+p);
         boolean flag = usersBSL.checkUser(p.getUsername());
         if (flag) {
@@ -33,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/get/{username}")
-    public Users getPerson(@PathVariable("username") String username) {
+    public User getPerson(@PathVariable("username") String username) {
         boolean flag;
         System.out.println("in get with username:" + username);
 
@@ -46,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/get")
-    public List<Users> get() {
+    public List<User> get() {
         return usersBSL.getUsers();
     }
 

@@ -9,5 +9,4 @@ public class OrderNotifierModuleApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OrderNotifierModuleApplication.class, args);
 	}
-
 }

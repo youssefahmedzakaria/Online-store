@@ -14,7 +14,7 @@
 	<name>OrderNotifier-Module</name>
 	<description>Order management and notifications system</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
