@@ -18,7 +18,7 @@ public class ShoppingCartBSL {
 
     public String addToCart(String productName, int Quantity) {
         Product product = productBSL.findProduct(productName);
-        if (product.getName() != null) {
+        if (product != null) {
             if (product.getQuantity() >= Quantity) {
                 if (shoppingCart.getCart() == null) {
                     shoppingCart.setTotalCost((float) (product.getPrice() * Quantity));

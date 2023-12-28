@@ -1,36 +1,16 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
+
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
 
-
-@Service
-public class OrderBSL {
-    @Autowired
-    protected Order order = new Order();
-    protected static final ArrayList<Order> orders = new ArrayList<>();
-    protected static final ArrayList<Product> orderedProducts = new ArrayList<>();
-
-    public ArrayList<Product> getOrderedProducts() {
-        return orderedProducts;
-    }
-    static final Map<Integer, ArrayList<String>> orderMap = new HashMap<>();
-
-    public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
-        for (Product product : list1) {
-            list2.add(product);
-        }
-    }
-    public OrderBSL() {
-    }
+public class SimpleOrderBSL extends OrderBSL{
 
     public String placeOrder() {
         orderedProducts.clear();
         // orderedProducts.addAll(order.getShoppingCartBSL().getShoppingCart().getCart());
-            CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderedProducts);
+        CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderedProducts);
         if (order.getShoppingCartBSL().getShoppingCart().getCart().isEmpty()) {
             return "Cart is empty";
         }
@@ -47,12 +27,15 @@ public class OrderBSL {
             for (Order order : orders) {
                 if (order.getOrderId() == orderId) {
                     order.setStatus(false);
+                    orders.remove(order);
+                    orderMap.remove(orderId);
                     return "Order Cancelled";
                 }
             }
         }
         return "Order not placed";
     }
+
 
     public ArrayList<String> getOrder(int orderId) {
         ArrayList<String> orderDetails = orderMap.get(orderId);
@@ -74,6 +57,5 @@ public class OrderBSL {
     public ArrayList<Order> getOrders() {
         return orders;
     }
-
 
 }
