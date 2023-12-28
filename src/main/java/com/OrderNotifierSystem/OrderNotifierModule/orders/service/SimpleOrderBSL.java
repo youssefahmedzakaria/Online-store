@@ -4,12 +4,14 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
 @Service
 public class SimpleOrderBSL extends OrderBSL {
-
+    private static final int CANCELLATION_DURATION_LIMIT = 2;
     public String placeOrder() {
         orderedProducts.clear();
         // orderedProducts.addAll(order.getShoppingCartBSL().getShoppingCart().getCart());
@@ -52,8 +54,22 @@ public class SimpleOrderBSL extends OrderBSL {
         if (order.getShipped()) {
             for (Order order : orders) {
                 if (order.getOrderId() == orderId) {
-                    order.setShipped(false);
-                    return "Shipping Cancelled";
+                    // Calculate the current time
+                    LocalDateTime currentTime = LocalDateTime.now();
+
+                    // Get the order placement time
+                    LocalDateTime orderPlacementTime = order.getPlacementTime();
+
+                    // Calculate the duration between order placement and current time
+                    Duration duration = Duration.between(orderPlacementTime, currentTime);
+
+                    // Check if the duration is within the pre-configured limit
+                    if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
+                        order.setShipped(false);
+                        return "Shipping Cancelled";
+                    } else {
+                        return "Cancellation period has expired";
+                    }
                 }
             }
         }

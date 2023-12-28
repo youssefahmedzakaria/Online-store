@@ -4,6 +4,7 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -73,6 +74,7 @@ public class OrderBSL {
                 orderDetails.add(orderProduct);
             }
             orderMap.put(orderId, orderDetails);
+            order.setPlacementTime(LocalDateTime.now());
             return orderDetails;
         }
         return null;
