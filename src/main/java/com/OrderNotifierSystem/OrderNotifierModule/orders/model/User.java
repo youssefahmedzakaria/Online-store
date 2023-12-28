@@ -6,6 +6,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class User {
+    private ArrayList<Order> orders = new ArrayList<>();
+    private String username;
+    private String email;
+    private String password;
+    private String address;
+    private float balance;
+    private String phone;
 
 
     public User() {
@@ -76,11 +83,4 @@ public class User {
         this.phone = phone;
     }
 
-    private ArrayList<Order> orders = new ArrayList<>();
-    private String username;
-    private String email;
-    private String password;
-    private String address;
-    private float balance;
-    private String phone;
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ShoppingCartBSL {
 
 
-    private ShoppingCart shoppingCart = new ShoppingCart();
+    private final static ShoppingCart shoppingCart = new ShoppingCart();
     ProductBSL productBSL = new ProductBSL();
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
@@ -62,6 +62,12 @@ public class ShoppingCartBSL {
             return "Product not found in cart";
         }
         return "Product not found";
+    }
+
+    public void clearCart() {
+        shoppingCart.setCart(null);
+        shoppingCart.setTotalCost(0);
+        shoppingCart.setQuantity(0);
     }
 
 

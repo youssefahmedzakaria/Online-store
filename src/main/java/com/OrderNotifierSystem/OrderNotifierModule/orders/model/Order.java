@@ -5,12 +5,30 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ShoppingCartBS
 
 @Component
 public class Order {
+    private boolean isPlaced = false;
+
+    private boolean isShipped = false;
     private int orderId = 0;
-    boolean orderStatus = false;
+    Boolean orderStatus = false;
 
-    private User user = new User();
+    private final static User user = new User();
 
-    private ShoppingCartBSL shoppingCartBSL = new ShoppingCartBSL();
+    private final static ShoppingCartBSL shoppingCartBSL = new ShoppingCartBSL();
+    public Order() {
+    }
+    public boolean getShipped() {
+        return isShipped;
+    }
+
+    public void setShipped(boolean shipped) {
+        isShipped = shipped;
+    }
+    public boolean getPlaced() {
+        return isPlaced;
+    }
+    public void setPlaced(boolean placed) {
+        isPlaced = placed;
+    }
 
 
     public ShoppingCartBSL getShoppingCartBSL() {
@@ -36,8 +54,6 @@ public class Order {
 
     public void setStatus(boolean status) {
         this.orderStatus = status;
-    }
-    public Order() {
     }
 
 
