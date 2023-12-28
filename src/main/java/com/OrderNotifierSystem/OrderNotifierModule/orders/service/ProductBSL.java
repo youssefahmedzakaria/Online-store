@@ -6,7 +6,7 @@ import java.util.*;
 
 @Service
 public class ProductBSL {
-private ArrayList<Product> products = new ArrayList<Product>();
+    private static final ArrayList<Product> products = new ArrayList<>();
 
     public ProductBSL() {
         products.add(new Product("1", "Apple", "المعلم زكريا", "Fruit", 10.0, 100));
@@ -20,7 +20,6 @@ private ArrayList<Product> products = new ArrayList<Product>();
         products.add(new Product("9", "Papaya", "المعلمة مرام", "Fruit", 90.0, 100));
         products.add(new Product("10", "Guava", "المعلمة مرام", "Fruit", 100.0, 100));
     }
-
 
 
     public ArrayList<Product> getProducts() {

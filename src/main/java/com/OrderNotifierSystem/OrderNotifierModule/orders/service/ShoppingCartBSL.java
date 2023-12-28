@@ -3,10 +3,10 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.ShoppingCart;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
 import java.util.ArrayList;
 
+
 public class ShoppingCartBSL {
 
-    private final ShoppingCart shoppingCart = new ShoppingCart();
-
+    private ShoppingCart shoppingCart = new ShoppingCart();
     public String addToCart(String productName, int Quantity) {
         ProductBSL productBSL = new ProductBSL();
         Product product = productBSL.findProduct(productName);

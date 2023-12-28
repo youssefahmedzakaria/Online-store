@@ -8,7 +8,9 @@ public class ShoppingCart {
     private float totalCost;
     private int quantity;
 
-
+    public void setCart(ArrayList<Product> cart) {
+        this.cart = cart;
+    }
     public ArrayList<Product> getCart() {
         return cart;
     }
