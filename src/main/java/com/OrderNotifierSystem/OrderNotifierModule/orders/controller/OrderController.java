@@ -1,6 +1,7 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.SimpleOrder;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.OrderBSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,10 +39,8 @@ public class OrderController {
     public ArrayList<String> getOrder(@PathVariable("orderId") int orderId) {
         return orderBSL.getOrder(orderId);
     }
-
     @GetMapping("/checkout/{orderId}")
     public ResponseEntity<String> checkout(@PathVariable("orderId") int orderId) {
         return ResponseEntity.ok(orderBSL.checkOut(orderId));
     }
-
 }

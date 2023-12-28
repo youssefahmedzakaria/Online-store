@@ -1,11 +1,14 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
-
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.*;
 
-public class SimpleOrderBSL extends OrderBSL{
+
+@Service
+public class SimpleOrderBSL extends OrderBSL {
 
     public String placeOrder() {
         orderedProducts.clear();
@@ -18,33 +21,56 @@ public class SimpleOrderBSL extends OrderBSL{
         order.setStatus(true);
         orders.add(order);
         order.setPlaced(true);
-        order.getShoppingCartBSL().clearCart();
-        return "Order placed successfully \n " +   "Your Order ID is: " + order.getOrderId();
+        return "Order placed successfully \n " + "Your Order ID is: " + order.getOrderId();
     }
 
     public String cancelOrderPlacement(int orderId) {
         if (order.getPlaced()) {
             for (Order order : orders) {
                 if (order.getOrderId() == orderId) {
+                    order.setPlaced(false);
+                    orderMap.remove(orderId, orderMap.get(orderId));
                     order.setStatus(false);
-                    orders.remove(order);
-                    orderMap.remove(orderId);
                     return "Order Cancelled";
                 }
             }
         }
         return "Order not placed";
     }
-
+    public String shipOrder(int orderId) {
+        if (order.getPlaced()) {
+            for (Order order : orders) {
+                if (order.getOrderId() == orderId) {
+                    order.setShipped(true);
+                    return "Order Shipped";
+                }
+            }
+        }
+        return "Order not placed";
+    }
+    public String cancelOrderShipping(int orderId) {
+        if (order.getShipped()) {
+            for (Order order : orders) {
+                if (order.getOrderId() == orderId) {
+                    order.setShipped(false);
+                    return "Shipping Cancelled";
+                }
+            }
+        }
+        return "Order not placed";
+    }
 
     public ArrayList<String> getOrder(int orderId) {
+        if (!order.getStatus()) {
+            return null;
+        }
         ArrayList<String> orderDetails = orderMap.get(orderId);
         if (orderDetails != null) {
             return orderDetails;
         }
         orderDetails = new ArrayList<>();
         if (order.getOrderId() == orderId) {
-            for (Product product: orderedProducts) {
+            for (Product product : orderedProducts) {
                 String orderProduct = "Product Details: " + product.getName() + " x " + product.getQuantity() + " = $" + (product.getPrice() * product.getQuantity());
                 orderDetails.add(orderProduct);
             }
@@ -57,5 +83,20 @@ public class SimpleOrderBSL extends OrderBSL{
     public ArrayList<Order> getOrders() {
         return orders;
     }
+
+    public String checkOut(int orderId) {
+        if (order.getPlaced()) {
+            for (Order order : orders) {
+                if (order.getOrderId() == orderId) {
+                    order.setShipped(true);
+                    String cost = String.valueOf(order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+                    order.getShoppingCartBSL().clearCart();
+                    return "Total Cost: " + "$" + cost;
+                }
+            }
+        }
+        return "Order not placed";
+    }
+
 
 }
