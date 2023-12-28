@@ -28,7 +28,7 @@ public class ShoppingCartController {
         return ResponseEntity.ok(shoppingCartBSL.DisplayCart());
     }
     @GetMapping("/getTotalCost")
-    public ResponseEntity <Float>getTotalCost() {
+    public ResponseEntity <String>getTotalCost() {
         return ResponseEntity.ok(shoppingCartBSL.getTotalCost());
     }
 }

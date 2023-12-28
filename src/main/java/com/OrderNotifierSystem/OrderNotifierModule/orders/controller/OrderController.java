@@ -39,4 +39,9 @@ public class OrderController {
         return orderBSL.getOrder(orderId);
     }
 
+    @GetMapping("/checkout/{orderId}")
+    public ResponseEntity<String> checkout(@PathVariable("orderId") int orderId) {
+        return ResponseEntity.ok(orderBSL.checkOut(orderId));
+    }
+
 }

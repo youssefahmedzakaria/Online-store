@@ -17,6 +17,7 @@ public class OrderBSL {
     public ArrayList<Product> getOrderedProducts() {
         return orderedProducts;
     }
+
     static final Map<Integer, ArrayList<String>> orderMap = new HashMap<>();
 
     public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
@@ -24,13 +25,14 @@ public class OrderBSL {
             list2.add(product);
         }
     }
+
     public OrderBSL() {
     }
 
     public String placeOrder() {
         orderedProducts.clear();
         // orderedProducts.addAll(order.getShoppingCartBSL().getShoppingCart().getCart());
-            CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderedProducts);
+        CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderedProducts);
         if (order.getShoppingCartBSL().getShoppingCart().getCart().isEmpty()) {
             return "Cart is empty";
         }
@@ -38,8 +40,8 @@ public class OrderBSL {
         order.setStatus(true);
         orders.add(order);
         order.setPlaced(true);
-        order.getShoppingCartBSL().clearCart();
-        return "Order placed successfully \n " +   "Your Order ID is: " + order.getOrderId();
+//        order.getShoppingCartBSL().clearCart();
+        return "Order placed successfully \n " + "Your Order ID is: " + order.getOrderId();
     }
 
     public String cancelOrderPlacement(int orderId) {
@@ -57,7 +59,7 @@ public class OrderBSL {
     }
 
     public ArrayList<String> getOrder(int orderId) {
-        if(!order.getStatus()){
+        if (!order.getStatus()) {
             return null;
         }
         ArrayList<String> orderDetails = orderMap.get(orderId);
@@ -66,7 +68,7 @@ public class OrderBSL {
         }
         orderDetails = new ArrayList<>();
         if (order.getOrderId() == orderId) {
-            for (Product product: orderedProducts) {
+            for (Product product : orderedProducts) {
                 String orderProduct = "Product Details: " + product.getName() + " x " + product.getQuantity() + " = $" + (product.getPrice() * product.getQuantity());
                 orderDetails.add(orderProduct);
             }
@@ -78,6 +80,20 @@ public class OrderBSL {
 
     public ArrayList<Order> getOrders() {
         return orders;
+    }
+
+    public String checkOut(int orderId) {
+        if (order.getPlaced()) {
+            for (Order order : orders) {
+                if (order.getOrderId() == orderId) {
+                    order.setShipped(true);
+                    String cost = String.valueOf(order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+                    order.getShoppingCartBSL().clearCart();
+                    return "Total Cost: " + "$" + cost;
+                }
+            }
+        }
+        return "Order not placed";
     }
 
 

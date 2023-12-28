@@ -71,8 +71,7 @@ public class ShoppingCartBSL {
     }
 
 
-
-    public float getTotalCost() {
-        return shoppingCart.getTotalCost();
+    public String getTotalCost() {
+        return "Total Cost: " + "&" +shoppingCart.getTotalCost();
     }
 }
