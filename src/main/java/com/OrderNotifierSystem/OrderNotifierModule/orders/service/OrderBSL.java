@@ -11,12 +11,14 @@ import java.util.*;
 public class OrderBSL {
     @Autowired
     private Order order = new Order();
-    private final ArrayList<Order> orders = new ArrayList<>();
-    private final ArrayList<Product> orderedProducts = new ArrayList<>();
+    private static final ArrayList<Order> orders = new ArrayList<>();
+    private static final ArrayList<Product> orderedProducts = new ArrayList<>();
 
     public ArrayList<Product> getOrderedProducts() {
         return orderedProducts;
     }
+    //create a map that have order id as key and list of products as value
+    static final Map<Integer, ArrayList<String>> orderMap = new HashMap<>();
 
     public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
         for (Product product : list1) {
@@ -27,7 +29,8 @@ public class OrderBSL {
     }
 
     public String placeOrder() {
-       // orderedProducts.addAll(order.getShoppingCartBSL().getShoppingCart().getCart());
+        orderedProducts.clear();
+        // orderedProducts.addAll(order.getShoppingCartBSL().getShoppingCart().getCart());
             CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderedProducts);
         if (order.getShoppingCartBSL().getShoppingCart().getCart().isEmpty()) {
             return "Cart is empty";
@@ -53,16 +56,21 @@ public class OrderBSL {
     }
 
     public ArrayList<String> getOrder(int orderId) {
-        ArrayList<String> orderDetails = new ArrayList<>();
-        for (Product product: orderedProducts) {
-            if (order.getOrderId() == orderId) {
-                String OrderProducts = "Order Details: \n" + product.getName() + " x " + product.getQuantity() + " = $" + product.getPrice() * product.getQuantity();
-                orderDetails.add(OrderProducts);
-
-            }
+        ArrayList<String> orderDetails = orderMap.get(orderId);
+        if (orderDetails != null) {
+            return orderDetails;
         }
-        return orderDetails;
 
+        orderDetails = new ArrayList<>();
+        if (order.getOrderId() == orderId) {
+            for (Product product: orderedProducts) {
+                String orderProduct = "Order Details: " + product.getName() + " x " + product.getQuantity() + " = $" + (product.getPrice() * product.getQuantity());
+                orderDetails.add(orderProduct);
+            }
+            orderMap.put(orderId, orderDetails);
+            return orderDetails;
+        }
+        return null;
     }
 
     public ArrayList<Order> getOrders() {
