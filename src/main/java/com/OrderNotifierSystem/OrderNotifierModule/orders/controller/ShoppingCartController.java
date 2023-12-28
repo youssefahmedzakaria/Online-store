@@ -18,6 +18,11 @@ public class ShoppingCartController {
     public String addToCart(@PathVariable("productName") String productName, @PathVariable("quantity") int quantity) {
         return shoppingCartBSL.addToCart(productName, quantity);
     }
+    @PostMapping("/removeProduct/{productName}")
+    public String removeProduct(@PathVariable("productName") String productName) {
+        return shoppingCartBSL.removeProduct(productName);
+    }
+
     @GetMapping("/displayCart")
     public ResponseEntity <ArrayList<String>> displayCart() {
         return ResponseEntity.ok(shoppingCartBSL.DisplayCart());

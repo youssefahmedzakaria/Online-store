@@ -1,14 +1,22 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.ShoppingCart;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 
 
+@NoArgsConstructor
 public class ShoppingCartBSL {
 
+
     private ShoppingCart shoppingCart = new ShoppingCart();
+    ProductBSL productBSL = new ProductBSL();
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
     public String addToCart(String productName, int Quantity) {
-        ProductBSL productBSL = new ProductBSL();
         Product product = productBSL.findProduct(productName);
         if (product.getName() != null) {
             if (product.getQuantity() >= Quantity) {
@@ -39,6 +47,25 @@ public class ShoppingCartBSL {
         }
         return cartProducts;
     }
+    public String removeProduct(String productName) {
+        Product product = productBSL.findProduct(productName);
+        if (product.getName() != null) {
+            for (Product cartProduct : shoppingCart.getCart()) {
+                if (cartProduct.getName().equals(productName)) {
+                    shoppingCart.setTotalCost((float) (shoppingCart.getTotalCost() - cartProduct.getPrice() * cartProduct.getQuantity()));
+                    product.setQuantity(product.getQuantity() + cartProduct.getQuantity());
+                    shoppingCart.getCart().remove(cartProduct);
+                    return productName + " removed from cart";
+                }
+            }
+        } else {
+            return "Product not found in cart";
+        }
+        return "Product not found";
+    }
+
+
+
     public float getTotalCost() {
         return shoppingCart.getTotalCost();
     }
