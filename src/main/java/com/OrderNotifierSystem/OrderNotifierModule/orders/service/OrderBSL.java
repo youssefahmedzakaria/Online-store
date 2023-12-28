@@ -18,12 +18,17 @@ public class OrderBSL {
         return orderedProducts;
     }
 
-
+    public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
+        for (Product product : list1) {
+            list2.add(product);
+        }
+    }
     public OrderBSL() {
     }
 
     public String placeOrder() {
-        orderedProducts.addAll(order.getShoppingCartBSL().getShoppingCart().getCart());
+       // orderedProducts.addAll(order.getShoppingCartBSL().getShoppingCart().getCart());
+            CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderedProducts);
         if (order.getShoppingCartBSL().getShoppingCart().getCart().isEmpty()) {
             return "Cart is empty";
         }
@@ -51,10 +56,13 @@ public class OrderBSL {
         ArrayList<String> orderDetails = new ArrayList<>();
         for (Product product: orderedProducts) {
             if (order.getOrderId() == orderId) {
-                return orderDetails;
+                String OrderProducts = "Order Details: \n" + product.getName() + " x " + product.getQuantity() + " = $" + product.getPrice() * product.getQuantity();
+                orderDetails.add(OrderProducts);
+
             }
         }
-        return null;
+        return orderDetails;
+
     }
 
     public ArrayList<Order> getOrders() {

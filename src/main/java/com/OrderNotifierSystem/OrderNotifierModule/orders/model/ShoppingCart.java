@@ -4,7 +4,7 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
 import java.util.ArrayList;
 
 public class ShoppingCart {
-    private ArrayList<Product> cart = new ArrayList<>();
+    public ArrayList<Product> cart = new ArrayList<>();
     private float totalCost;
     private int quantity;
 

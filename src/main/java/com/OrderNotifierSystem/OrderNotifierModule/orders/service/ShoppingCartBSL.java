@@ -65,7 +65,7 @@ public class ShoppingCartBSL {
     }
 
     public void clearCart() {
-        shoppingCart.setCart(null);
+        shoppingCart.getCart().clear();
         shoppingCart.setTotalCost(0);
         shoppingCart.setQuantity(0);
     }
