@@ -1,5 +1,6 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
 
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import java.util.*;
 
 @Service
 public class UsersBSL {
-    private final List<User> users ;
+    private final List<User> users;
 
     @Autowired
     public UsersBSL(List<User> users) {
@@ -18,7 +19,6 @@ public class UsersBSL {
 
 
     public void createUser(User user) {
-        user.setBalance();
         users.add(user);
     }
 
@@ -42,5 +42,18 @@ public class UsersBSL {
             }
         }
         return false;
+    }
+
+
+    public void addBalance(String username, float balance) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                user.setBalance(user.getBalance() + balance);
+            }
+        }
+    }
+
+    public void cancelOrder(String username, float balance) {  //to be edited with order object
+
     }
 }

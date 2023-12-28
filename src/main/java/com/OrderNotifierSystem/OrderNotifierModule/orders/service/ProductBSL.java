@@ -21,6 +21,8 @@ private ArrayList<Product> products = new ArrayList<Product>();
         products.add(new Product("10", "Guava", "المعلمة مرام", "Fruit", 100.0, 100));
     }
 
+
+
     public ArrayList<Product> getProducts() {
         return products;
     }

@@ -48,10 +48,4 @@ public class UserController {
     public List<User> get() {
         return usersBSL.getUsers();
     }
-
-
-    @GetMapping("/habal")
-    public String habal() {
-        return "Habal";
-    }
 }
