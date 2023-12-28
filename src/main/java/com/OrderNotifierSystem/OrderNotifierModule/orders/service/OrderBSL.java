@@ -46,6 +46,8 @@ public class OrderBSL {
         if (order.getPlaced()) {
             for (Order order : orders) {
                 if (order.getOrderId() == orderId) {
+                    order.setPlaced(false);
+                    orderMap.remove(orderId, orderMap.get(orderId));
                     order.setStatus(false);
                     return "Order Cancelled";
                 }
@@ -55,6 +57,9 @@ public class OrderBSL {
     }
 
     public ArrayList<String> getOrder(int orderId) {
+        if(!order.getStatus()){
+            return null;
+        }
         ArrayList<String> orderDetails = orderMap.get(orderId);
         if (orderDetails != null) {
             return orderDetails;
