@@ -7,11 +7,11 @@ import java.util.ArrayList;
 
 
 @NoArgsConstructor
-public class ShoppingCartBSL {
+public class ShoppingCartImp {
 
 
     private final static ShoppingCart shoppingCart = new ShoppingCart();
-    ProductBSL productBSL = new ProductBSL();
+    ProductDBImp productBSL = new ProductDBImp();
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
     }

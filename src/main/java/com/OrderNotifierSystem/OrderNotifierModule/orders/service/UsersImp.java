@@ -1,42 +1,36 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
 
-import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.UserDB;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 
 @Service
-public class UsersBSL {
-    private final List<User> users;
+public class UsersImp {
+    private final UserDB users = new UserDB();
 
-    @Autowired
-    public UsersBSL(List<User> users) {
-        this.users = users;
-    }
 
 
     public void createUser(User user) {
-        users.add(user);
+        users.getUsers().add(user);
     }
 
     public List<User> getUsers() {
-        return users;
+        return users.getUsers();
     }
 
     public User getUser(String username) {
-        for (User user : users) {
+        for (User user : users.getUsers()) {
             if (user.getUsername().equals(username)) {
                 return user;
             }
         }
         return null;
     }
-
     public boolean checkUser(String username) {
-        for (User user : users) {
+        for (User user : users.getUsers()) {
             if (user.getUsername().equals(username)) {
                 return true;
             }
@@ -46,14 +40,11 @@ public class UsersBSL {
 
 
     public void addBalance(String username, float balance) {
-        for (User user : users) {
+        for (User user : users.getUsers()) {
             if (user.getUsername().equals(username)) {
                 user.setBalance(user.getBalance() + balance);
             }
         }
     }
 
-    public void cancelOrder(String username, float balance) {  //to be edited with order object
-
-    }
 }

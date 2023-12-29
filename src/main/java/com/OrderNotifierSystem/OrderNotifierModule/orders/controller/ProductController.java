@@ -1,6 +1,6 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ProductBSL;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ProductDBImp;
 import lombok.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +11,15 @@ import java.util.*;
 @RestController
 public class ProductController {
 
-    private final ProductBSL ProductBSL;
+    private final ProductDBImp ProductBSL;
+    @GetMapping(value = "/makeMenu")
+    public ResponseEntity makeMenu() {
+        return ResponseEntity.ok(ProductBSL.makeMenu());
+    }
 
     @GetMapping(value = "/products")
-    public ResponseEntity<ArrayList<Product>> getProducts() {
-        return ResponseEntity.ok(ProductBSL.getProducts());
+    public ResponseEntity<ArrayList<Product>> ViewProducts() {
+        return ResponseEntity.ok(ProductBSL.ViewProducts());
     }
 
     @GetMapping(value = "/getProduct/{name}")

@@ -1,16 +1,16 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Response;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.service.UsersBSL;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.service.UsersImp;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 public class UserController {
-    private UsersBSL usersBSL;
+    private UsersImp usersBSL;
 
-    public UserController(UsersBSL usersBSL) {
+    public UserController(UsersImp usersBSL) {
         this.usersBSL = usersBSL;
     }
 

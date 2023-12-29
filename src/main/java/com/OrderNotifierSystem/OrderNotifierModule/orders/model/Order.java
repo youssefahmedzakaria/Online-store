@@ -1,7 +1,7 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.model;
 
 import org.springframework.stereotype.Component;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ShoppingCartBSL;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ShoppingCartImp;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ public class Order {
 
     private final static User user = new User();
 
-    private final static ShoppingCartBSL shoppingCartBSL = new ShoppingCartBSL();
+    private final static ShoppingCartImp shoppingCartBSL = new ShoppingCartImp();
     public Order() {
     }
     public boolean getShipped() {
@@ -37,7 +37,7 @@ public class Order {
     }
 
 
-    public ShoppingCartBSL getShoppingCartBSL() {
+    public ShoppingCartImp getShoppingCartBSL() {
         return shoppingCartBSL;
     }
     public User getUser() {
