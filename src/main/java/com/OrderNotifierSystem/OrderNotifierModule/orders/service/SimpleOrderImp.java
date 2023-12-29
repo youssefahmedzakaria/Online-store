@@ -1,6 +1,8 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.UserDB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -12,67 +14,93 @@ import java.util.*;
 public class SimpleOrderImp extends OrderImp {
     private static final int CANCELLATION_DURATION_LIMIT = 2;
     @Override
-    public String placeOrder() {
-        orderDB.getOrderedProducts().clear();
-        // orderedProducts.addAll(order.getShoppingCartBSL().getShoppingCart().getCart());
-        CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderDB.getOrderedProducts());
-        if (order.getShoppingCartBSL().getShoppingCart().getCart().isEmpty()) {
-            return "Cart is empty";
-        }
-        order.setOrderId(order.getOrderId() + 1);
-        order.setStatus(true);
-        orderDB.getOrders().add(order);
-        order.setPlaced(true);
-        return "Order placed successfully \n " + "Your Order ID is: " + order.getOrderId();
-    }
-    @Override
-    public String cancelOrderPlacement(int orderId) {
-        if (order.getPlaced()) {
-            for (Order order : orderDB.getOrders()) {
-                if (order.getOrderId() == orderId) {
-                    order.setPlaced(false);
-                    orderDB.getOrderMap().remove(orderId, orderDB.getOrderMap().get(orderId));
-                    order.setStatus(false);
-                    return "Order Cancelled";
+    public String placeOrder(String username) {
+        for (User user : order.getUser()) {
+            if (user.getUsername().equals(username)) {
+                orderDB.getOrderedProducts().clear();
+                CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderDB.getOrderedProducts());
+                if (order.getShoppingCartBSL().getShoppingCart().getCart().isEmpty()) {
+                    return "Cart is empty";
                 }
+                order.setOrderId(order.getOrderId() + 1);
+                order.setStatus(true);
+                orderDB.getOrders().add(order);
+                order.setPlaced(true);
+                user.getOrders().add(order);
+                user.setBalance(user.getBalance() - order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+                return "Order placed successfully \n " + "Your Order ID is: " + order.getOrderId();
             }
         }
-        return "Order not placed";
+        return "User not found";
     }
+
     @Override
-    public String shipOrder(int orderId) {
-        if (order.getPlaced()) {
-            for (Order order : orderDB.getOrders()) {
-                if (order.getOrderId() == orderId) {
-                    order.setShipped(true);
-                    order.setPlacementTime(LocalDateTime.now());
-                    return "Order Shipped";
-                }
-            }
-        }
-        return "Order not placed";
-    }
-
-    public String cancelOrderShipping(int orderId) {
-        if (order.getShipped()) {
-            for (Order order : orderDB.getOrders()) {
-                if (order.getOrderId() == orderId) {
-                    LocalDateTime currentTime = LocalDateTime.now();
-
-                    LocalDateTime orderPlacementTime = order.getPlacementTime();
-
-                    Duration duration = Duration.between(orderPlacementTime, currentTime);
-
-                    if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
-                        order.setShipped(false);
-                        return "Shipping Cancelled";
-                    } else {
-                        return "Shipment Cancellation period has expired";
+    public String cancelOrderPlacement(String username, int orderId) {
+        for (User user : order.getUser()) {
+            if (user.getUsername().equals(username)) {
+                if (order.getPlaced()) {
+                    for (Order order : orderDB.getOrders()) {
+                        if (order.getOrderId() == orderId) {
+                            order.setPlaced(false);
+                            orderDB.getOrderMap().remove(orderId, orderDB.getOrderMap().get(orderId));
+                            for (Product product : orderDB.getOrderedProducts()) {
+                                order.getShoppingCartBSL().removeFromCart(product.getName());
+                            }
+                            order.setStatus(false);
+                            user.setBalance(user.getBalance() + order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+                            return "Order Cancelled";
+                        }
                     }
                 }
+                return "Order not placed";
             }
         }
-        return "Order not placed";
+        return "User not found";
+    }
+
+    @Override
+    public String shipOrder(String username,int orderId) {
+        for (User user : order.getUser()) {
+            if (user.getUsername().equals(username)) {
+                if (order.getPlaced()) {
+                    for (Order order : orderDB.getOrders()) {
+                        if (order.getOrderId() == orderId) {
+                            order.setShipped(true);
+                            order.setPlacementTime(LocalDateTime.now());
+                            user.setBalance(user.getBalance() - order.getShippingFees());
+                            return "Order Shipped";
+                        }
+                    }
+                }
+                return "Order not placed";
+            }
+        }
+        return "User not found";
+    }
+
+    public String cancelOrderShipping(String username, int orderId) {
+        for (User user : order.getUser()) {
+            if (user.getUsername().equals(username)) {
+                if (order.getShipped()) {
+                    for (Order order : orderDB.getOrders()) {
+                        if (order.getOrderId() == orderId) {
+                            LocalDateTime currentTime = LocalDateTime.now();
+                            LocalDateTime orderPlacementTime = order.getPlacementTime();
+                            Duration duration = Duration.between(orderPlacementTime, currentTime);
+                            if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
+                                order.setShipped(false);
+                                user.setBalance(user.getBalance() + order.getShippingFees());
+                                return "Shipping Cancelled";
+                            } else {
+                                return "Shipment Cancellation period has expired";
+                            }
+                        }
+                    }
+                }
+                return "Order not placed";
+            }
+        }
+        return "User not found";
     }
 
     public ArrayList<String> getOrder(int orderId) {

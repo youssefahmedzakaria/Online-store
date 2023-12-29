@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class User {
-    private ArrayList<Order> orders = new ArrayList<>();
+
+    private static  ArrayList<Order> orders = new ArrayList<>();
     private String username;
     private String email;
     private String password;
@@ -18,22 +19,16 @@ public class User {
     public User() {
     }
 
-    public User(ArrayList<Order> orders, String username, String email, String password, String address, float balance, String phone) {
-        this.orders = orders;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.address = address;
-        this.balance = balance;
-        this.phone = phone;
-    }
-    public ArrayList<Order> getOrders() {
-        return orders;
-    }
+//    public User(ArrayList<Order> orders, String username, String email, String password, String address, float balance, String phone) {
+//
+//        this.username = username;
+//        this.email = email;
+//        this.password = password;
+//        this.address = address;
+//        this.balance = balance;
+//        this.phone = phone;
+//    }
 
-    public void setOrders(ArrayList<Order> orders) {
-        this.orders = orders;
-    }
 
     public String getUsername() {
         return username;
@@ -82,5 +77,9 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+    public static ArrayList<Order> getOrders() {
+        return orders;
+    }
+
 
 }

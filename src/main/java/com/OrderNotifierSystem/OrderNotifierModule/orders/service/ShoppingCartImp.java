@@ -47,7 +47,7 @@ public class ShoppingCartImp {
         }
         return cartProducts;
     }
-    public String removeProduct(String productName) {
+    public String removeFromCart(String productName) {
         Product product = productBSL.findProduct(productName);
         if (product.getName() != null) {
             for (Product cartProduct : shoppingCart.getCart()) {

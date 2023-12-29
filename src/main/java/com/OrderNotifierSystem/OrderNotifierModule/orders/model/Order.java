@@ -1,9 +1,11 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.model;
 
+import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.UserDB;
 import org.springframework.stereotype.Component;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ShoppingCartImp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Component
 public class Order {
@@ -17,7 +19,10 @@ public class Order {
     private int orderId = 0;
     Boolean orderStatus = false;
 
-    private final static User user = new User();
+    private int shippingFees = 15;
+
+    private final static UserDB user = new UserDB();
+
 
     private final static ShoppingCartImp shoppingCartBSL = new ShoppingCartImp();
     public Order() {
@@ -40,11 +45,13 @@ public class Order {
     public ShoppingCartImp getShoppingCartBSL() {
         return shoppingCartBSL;
     }
-    public User getUser() {
-        return user;
+    public ArrayList<User> getUser() {
+        return user.getUsers();
     }
 
-
+    public int getShippingFees() {
+        return shippingFees;
+    }
 
     public void setOrderId(int orderId) {
         this.orderId = orderId;

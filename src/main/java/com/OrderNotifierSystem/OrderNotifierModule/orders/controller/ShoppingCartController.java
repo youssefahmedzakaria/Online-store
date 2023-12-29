@@ -19,7 +19,7 @@ public class ShoppingCartController {
     }
     @DeleteMapping("/removeProduct/{productName}")
     public String removeProduct(@PathVariable("productName") String productName) {
-        return shoppingCartBSL.removeProduct(productName);
+        return shoppingCartBSL.removeFromCart(productName);
     }
     @GetMapping("/displayCart")
     public ResponseEntity <ArrayList<String>> displayCart() {

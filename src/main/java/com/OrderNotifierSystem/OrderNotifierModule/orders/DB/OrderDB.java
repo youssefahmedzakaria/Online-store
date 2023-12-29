@@ -1,6 +1,7 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.DB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 
 import java.util.*;
 

@@ -14,7 +14,7 @@ public class UserController {
         this.usersBSL = usersBSL;
     }
 
-    @PostMapping("/add")
+    @PostMapping("/addUser")
     public Response addPerson(@RequestBody User p) {
         System.out.println("in add person"+p);
         boolean flag = usersBSL.checkUser(p.getUsername());
