@@ -1,4 +1,5 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.OrderDB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.UserDB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
@@ -45,7 +46,8 @@ public class SimpleOrderImp extends OrderImp {
                         order.getShoppingCartBSL().removeFromCart(product.getName());
                     }
                     order.setStatus(false);
-                    //  user.setBalance(user.getBalance() + order.getShoppingCartBSL().getShoppingCart().getTotalCost()); totalCost 0
+                    // set the user's balance to the previous balance
+                    userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + OrderDB.getOrderTotalCost().get(orderId));
                     return "Order Cancelled";
                 }
             }
@@ -81,6 +83,7 @@ public class SimpleOrderImp extends OrderImp {
                     if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
                         order.setShipped(false);
                         userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + order.getShippingFees());
+
                         return "Shipping Cancelled";
                     } else {
                         return "Shipment Cancellation period has expired";
@@ -118,8 +121,10 @@ public class SimpleOrderImp extends OrderImp {
     public String checkOut(int orderId) {
         if (order.getPlaced()) {
             if(findOrder(orderId)) {
-                    order.setShipped(true);
+
+                order.setShipped(true);
                     String cost = String.valueOf(order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+                    OrderDB.getOrderTotalCost().put(orderId, order.getShoppingCartBSL().getShoppingCart().getTotalCost());
                     order.getShoppingCartBSL().clearCart();
                     return "Total Cost: " + "$" + cost;
                 }

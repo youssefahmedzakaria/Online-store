@@ -9,6 +9,7 @@ public class OrderDB {
     private static final ArrayList<Order> orders = new ArrayList<>();
     private static final ArrayList<Product> orderedProducts = new ArrayList<>();
     static final Map<Integer, ArrayList<String>> orderMap = new HashMap<>();
+    static final Map<Integer, Float> orderTotalCosts = new HashMap<>();
 
 
     public static ArrayList<Order> getOrders() {
@@ -19,6 +20,9 @@ public class OrderDB {
     }
     public static Map<Integer, ArrayList<String>> getOrderMap() {
         return orderMap;
+    }
+    public static Map<Integer, Float> getOrderTotalCost() {
+        return orderTotalCosts;
     }
 
 
