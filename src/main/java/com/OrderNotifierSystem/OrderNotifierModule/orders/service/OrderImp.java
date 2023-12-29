@@ -14,6 +14,7 @@ public abstract class OrderImp {
     protected Order order = new Order();
 
     protected OrderDB orderDB = new OrderDB();
+    protected UsersImp userImp = new UsersImp();
 
     public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
         for (Product product : list1) {
@@ -36,5 +37,6 @@ public abstract class OrderImp {
     public abstract ArrayList<Order> getOrders();
 
     public abstract String checkOut(int orderId);
+    public abstract boolean findOrder(int orderId);
 
 }

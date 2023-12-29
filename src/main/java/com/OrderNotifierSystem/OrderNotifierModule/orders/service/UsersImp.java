@@ -37,14 +37,4 @@ public class UsersImp {
         }
         return false;
     }
-
-
-    public void addBalance(String username, float balance) {
-        for (User user : users.getUsers()) {
-            if (user.getUsername().equals(username)) {
-                user.setBalance(user.getBalance() + balance);
-            }
-        }
-    }
-
 }

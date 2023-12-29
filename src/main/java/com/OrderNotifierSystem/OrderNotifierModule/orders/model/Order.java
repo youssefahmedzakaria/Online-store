@@ -21,7 +21,7 @@ public class Order {
 
     private int shippingFees = 15;
 
-    private final static UserDB user = new UserDB();
+    private final static User user = new User();
 
 
     private final static ShoppingCartImp shoppingCartBSL = new ShoppingCartImp();
@@ -45,8 +45,8 @@ public class Order {
     public ShoppingCartImp getShoppingCartBSL() {
         return shoppingCartBSL;
     }
-    public ArrayList<User> getUser() {
-        return user.getUsers();
+    public User getUser() {
+        return user;
     }
 
     public int getShippingFees() {
