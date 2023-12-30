@@ -27,7 +27,7 @@ public class OrderController {
     }
     @RequestMapping(value = "/placeOrders", method = RequestMethod.POST)
     public String placeOrders(@RequestParam ("usernames") ArrayList<String> usernames){
-        String respons= orderBSL.placeOrders(usernames);
+        String respons = orderBSL.placeOrders(usernames);
         return respons;
     }
 

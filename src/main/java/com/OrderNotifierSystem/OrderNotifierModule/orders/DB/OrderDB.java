@@ -7,6 +7,7 @@ import java.util.*;
 
 public class OrderDB {
     private static final ArrayList<Order> orders = new ArrayList<>();
+    private static final ArrayList<Order> compoundOrders = new ArrayList<>();
     private static final ArrayList<Product> orderedProducts = new ArrayList<>();
     static final Map<Integer, ArrayList<String>> orderMap = new HashMap<>();
     static final Map<Integer, Float> orderTotalCosts = new HashMap<>();
@@ -24,14 +25,26 @@ public class OrderDB {
     public static Map<Integer, Float> getOrderTotalCost() {
         return orderTotalCosts;
     }
+    public static ArrayList<Order> getCompoundOrder() {
+        return compoundOrders;
+    }
     public boolean findOrder(int orderId) {
-        for (Order order : getOrders()) {
+        for (Order order : orders) {
             if (order.getOrderId() == orderId) {
                 return true;
             }
         }
         return false;
     }
+    public boolean findCompoundOrder(int orderId) {
+        for (Order order : compoundOrders) {
+            if (order.getCompoundOrderId() == orderId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 

@@ -15,6 +15,7 @@ public class Order {
 
     private boolean isShipped = false;
     private int orderId = 0;
+    private int compoundOrderId = 0;
     Boolean orderStatus = false;
 
     private int shippingFees = 15;
@@ -70,6 +71,13 @@ public class Order {
     public LocalDateTime getShipmentTime() {return placementTime;}
 
     public void setPlacementTime(LocalDateTime placementTime) {this.placementTime = placementTime;}
+    public int getCompoundOrderId() {
+        return compoundOrderId;
+    }
+    public void setCompoundOrderId(int compoundOrderId) {
+        this.compoundOrderId = compoundOrderId;
+    }
+
 
 }
 

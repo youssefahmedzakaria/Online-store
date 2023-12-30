@@ -6,6 +6,8 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.SimpleOrder;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.UsersImp;
+
+import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -48,7 +50,23 @@ public class OrderBSL {
                 return "User not found";
             }
         }
-        return "Compound Order placed";
+         order.setCompoundOrderId(order.getCompoundOrderId() + 1);
+        return "Compound Order placed successfully \n" + "Your Order ID is:  " + order.getCompoundOrderId();
+    }
+    public String CancelOrdersPlacements(ArrayList<String> usernames, ArrayList<Integer> orderIds , int compoundOrderId){
+        if(orderDB.findCompoundOrder(compoundOrderId)){
+        for (String username : usernames) {
+            for (int orderId : orderIds) {
+                if (cancelOrderPlacement(username, orderId).equals("Order not Placed")) {
+                    return "Order not Placed";
+                } else if (cancelOrderPlacement(username, orderId).equals("User not found")) {
+                    return "User not found";
+                }
+            }
+        }
+        return "Orders Cancelled";
+    }
+    return "Compound Order not found";
     }
 
     public String cancelOrderPlacement(String username, int orderId) {
