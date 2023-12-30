@@ -1,9 +1,7 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.CompoundOrder;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.service.OrderImp;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.service.SimpleOrderImp;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.service.OrderBSL;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +10,8 @@ import java.util.*;
 @RestController
 public class OrderController {
 
-    private final OrderImp orderBSL;
-    public OrderController(OrderImp orderBSL) {
+    private final OrderBSL orderBSL;
+    public OrderController(OrderBSL orderBSL) {
         this.orderBSL = orderBSL;
     }
 
@@ -26,6 +24,11 @@ public class OrderController {
     @GetMapping("/cancelOrder/{username}/{orderId}")
     public String cancelOrder(@PathVariable("orderId") int orderId, @PathVariable("username") String username) {
         return orderBSL.cancelOrderPlacement(username ,orderId);
+    }
+    @RequestMapping(value = "/placeOrders", method = RequestMethod.POST)
+    public String placeOrders(@RequestParam ("usernames") ArrayList<String> usernames){
+        String respons= orderBSL.placeOrders(usernames);
+        return respons;
     }
 
     @GetMapping("/getOrders")

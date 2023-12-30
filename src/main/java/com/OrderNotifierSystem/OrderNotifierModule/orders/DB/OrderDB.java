@@ -24,6 +24,14 @@ public class OrderDB {
     public static Map<Integer, Float> getOrderTotalCost() {
         return orderTotalCosts;
     }
+    public boolean findOrder(int orderId) {
+        for (Order order : getOrders()) {
+            if (order.getOrderId() == orderId) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 

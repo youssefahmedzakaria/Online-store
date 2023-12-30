@@ -1,23 +1,29 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
+
 import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.OrderDB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
-import org.springframework.stereotype.Service;
-
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.SimpleOrder;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.service.UsersImp;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
 
-
-@Service
-public class SimpleOrderImp extends OrderImp {
-
+public class OrderBSL {
     private static final int CANCELLATION_DURATION_LIMIT = 2;
-    //create empty cons
-    @Override
+
+    private final OrderDB orderDB = new OrderDB();
+    private final UsersImp userImp = new UsersImp();
+    private final Order order = new Order();
+    public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
+        for (Product product : list1) {
+            list2.add(product);
+        }
+    }
     public String placeOrder(String username) {
+        orderDB.getOrderedProducts().clear();
         if (userImp.checkUser(username)) {
-            orderDB.getOrderedProducts().clear();
             CopyList(order.getShoppingCartBSL().getShoppingCart().getCart(), orderDB.getOrderedProducts());
             if (order.getShoppingCartBSL().getShoppingCart().getCart().isEmpty()) {
                 return "Cart is empty";
@@ -28,17 +34,27 @@ public class SimpleOrderImp extends OrderImp {
             order.setPlaced(true);
             userImp.getUser(username).getOrders().add(order);
             userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() - order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+            OrderDB.getOrderTotalCost().put(order.getOrderId(), order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+            order.getShoppingCartBSL().clearCart();
             return "Order placed successfully \n " + "Your Order ID is: " + order.getOrderId();
         }
         return "User not found";
     }
+    public String placeOrders(ArrayList<String> usernames) {
+        for (String username : usernames) {
+            if(placeOrder(username).equals("Cart is empty")) {
+                return "Cart is empty";
+            } else if ( placeOrder(username).equals("User not found")) {
+                return "User not found";
+            }
+        }
+        return "Compound Order placed";
+    }
 
-
-    @Override
     public String cancelOrderPlacement(String username, int orderId) {
         if (userImp.checkUser(username)) {
             if (order.getPlaced()) {
-                if (findOrder(orderId)) {
+                if (orderDB.findOrder(orderId)) {
                     order.setPlaced(false);
                     orderDB.getOrderMap().remove(orderId, orderDB.getOrderMap().get(orderId));
                     for (Product product : orderDB.getOrderedProducts()) {
@@ -55,11 +71,10 @@ public class SimpleOrderImp extends OrderImp {
         return "User not found";
     }
 
-    @Override
     public String shipOrder(String username, int orderId) {
         if (userImp.checkUser(username)) {
             if (order.getPlaced()) {
-                if (findOrder(orderId)) {
+                if (orderDB.findOrder(orderId)) {
                     order.setShipped(true);
                     order.setPlacementTime(LocalDateTime.now());
                     userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() - order.getShippingFees());
@@ -75,7 +90,7 @@ public class SimpleOrderImp extends OrderImp {
     public String cancelOrderShipping(String username, int orderId) {
         if (userImp.checkUser(username)) {
             if (order.getShipped()) {
-                if (findOrder(orderId)) {
+                if (orderDB.findOrder(orderId)) {
                     LocalDateTime currentTime = LocalDateTime.now();
                     LocalDateTime orderShipmentTime = order.getShipmentTime();
                     Duration duration = Duration.between(orderShipmentTime, currentTime);
@@ -103,7 +118,7 @@ public class SimpleOrderImp extends OrderImp {
             return orderDetails;
         }
         orderDetails = new ArrayList<>();
-        if (findOrder(orderId)) {
+        if (orderDB.findOrder(orderId)) {
             for (Product product : orderDB.getOrderedProducts()) {
                 String orderProduct = "Product Details: " + product.getName() + " x " + product.getQuantity() + " = $" + (product.getPrice() * product.getQuantity());
                 orderDetails.add(orderProduct);
@@ -120,28 +135,18 @@ public class SimpleOrderImp extends OrderImp {
 
     public String checkOut(int orderId) {
         if (order.getPlaced()) {
-            if (findOrder(orderId)) {
+            if (orderDB.findOrder(orderId)) {
 
                 order.setShipped(true);
-                String cost = String.valueOf(order.getShoppingCartBSL().getShoppingCart().getTotalCost());
-                OrderDB.getOrderTotalCost().put(orderId, order.getShoppingCartBSL().getShoppingCart().getTotalCost());
-                order.getShoppingCartBSL().clearCart();
+                String cost = String.valueOf(orderDB.getOrderTotalCost().get(orderId) + order.getShippingFees());
                 return "Total Cost: " + "$" + cost;
             }
         }
         return "Order not placed";
     }
 
-    public boolean findOrder(int orderId) {
-        for (Order order : orderDB.getOrders()) {
-            if (order.getOrderId() == orderId) {
-                return true;
-            }
-        }
-        return false;
-    }
-//make a function get simple order by ID
+
+
 
 
 }
-

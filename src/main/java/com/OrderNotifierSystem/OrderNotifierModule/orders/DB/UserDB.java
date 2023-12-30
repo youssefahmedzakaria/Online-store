@@ -9,7 +9,6 @@ import java.util.*;
 @NoArgsConstructor
 public class UserDB {
     private static final ArrayList<User> users = new ArrayList<>();
-
     public static ArrayList<User> getUsers() {
         return users;
     }
