@@ -18,11 +18,13 @@ public class OrderBSL {
     private final OrderDB orderDB = new OrderDB();
     private final UsersImp userImp = new UsersImp();
     private final Order order = new Order();
+
     public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
         for (Product product : list1) {
             list2.add(product);
         }
     }
+
     public String placeOrder(String username) {
         orderDB.getOrderedProducts().clear();
         if (userImp.checkUser(username)) {
@@ -42,32 +44,78 @@ public class OrderBSL {
         }
         return "User not found";
     }
+
     public String placeOrders(ArrayList<String> usernames) {
         for (String username : usernames) {
-            if(placeOrder(username).equals("Cart is empty")) {
+            if (placeOrder(username).equals("Cart is empty")) {
                 return "Cart is empty";
-            } else if ( placeOrder(username).equals("User not found")) {
+            } else if (placeOrder(username).equals("User not found")) {
                 return "User not found";
             }
         }
-         order.setCompoundOrderId(order.getCompoundOrderId() + 1);
+        orderDB.getCompoundOrder().add(order);
+        order.setCompoundOrderId(order.getCompoundOrderId() + 1);
         return "Compound Order placed successfully \n" + "Your Order ID is:  " + order.getCompoundOrderId();
     }
-    public String CancelOrdersPlacements(ArrayList<String> usernames, ArrayList<Integer> orderIds , int compoundOrderId){
-        if(orderDB.findCompoundOrder(compoundOrderId)){
-        for (String username : usernames) {
-            for (int orderId : orderIds) {
-                if (cancelOrderPlacement(username, orderId).equals("Order not Placed")) {
-                    return "Order not Placed";
-                } else if (cancelOrderPlacement(username, orderId).equals("User not found")) {
-                    return "User not found";
+
+    public String CancelOrdersPlacements(ArrayList<String> usernames, ArrayList<Integer> orderIds, int compoundOrderId) {
+        if (orderDB.findCompoundOrder(compoundOrderId)) {
+            for (String username : usernames) {
+                for (int orderId : orderIds) {
+                    if (cancelOrderPlacement(username, orderId).equals("Order not Placed")) {
+                        return "Order not Placed";
+                    } else if (cancelOrderPlacement(username, orderId).equals("User not found")) {
+                        return "User not found";
+                    }
                 }
             }
+            return "Orders Cancelled";
         }
-        return "Orders Cancelled";
+        return "Compound Order not found";
     }
-    return "Compound Order not found";
+
+    public String shipOrders(ArrayList<String> usernames, ArrayList<Integer> orderIds, int compoundOrderId) {
+        if (orderDB.findCompoundOrder(compoundOrderId)) {
+            for (String username : usernames) {
+                for (int orderId : orderIds) {
+                    if (shipOrder(username, orderId).equals("Order not placed")) {
+                        return "Order not placed";
+                    } else if (shipOrder(username, orderId).equals("User not found")) {
+                        return "User not found";
+                    }
+                }
+            }
+            order.setPlacementTime(LocalDateTime.now());
+            return "Orders Shipped";
+        }
+        return "Compound Order not found";
     }
+
+    public String cancelOrdersShipping(ArrayList<String> usernames, ArrayList<Integer> orderIds, int compoundOrderId) {
+
+        if (orderDB.findCompoundOrder(compoundOrderId)) {
+            LocalDateTime currentTime = LocalDateTime.now();
+            LocalDateTime orderShipmentTime = order.getShipmentTime();
+            Duration duration = Duration.between(orderShipmentTime, currentTime);
+            if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
+                for (String username : usernames) {
+                    for (int orderId : orderIds) {
+                        if (cancelOrderShipping(username, orderId).equals("Order not shipped")) {
+                            return "Order not shipped";
+                        } else if (cancelOrderShipping(username, orderId).equals("User not found")) {
+                            return "User not found";
+                        }
+                    }
+                }
+                return "Shipping Cancelled";
+
+            } else {
+                return "Shipment Cancellation period has expired";
+            }
+        }
+        return "Compound Order not found";
+    }
+
 
     public String cancelOrderPlacement(String username, int orderId) {
         if (userImp.checkUser(username)) {
@@ -146,6 +194,18 @@ public class OrderBSL {
         }
         return null;
     }
+    public ArrayList<String> getCompoundOrder(int compoundOrderId) {
+        if (orderDB.findCompoundOrder(compoundOrderId)) {
+            ArrayList<String> compoundOrderDetails = new ArrayList<>();
+            for (Order order : orderDB.getCompoundOrder()) {
+                for (Product product : orderDB.getOrderedProducts()) {
+                    String orderProduct = "Product Details: " + product.getName() + " x " + product.getQuantity() + " = $" + (product.getPrice() * product.getQuantity());
+                    compoundOrderDetails.add(orderProduct);
+                }
+            }
+        }
+        return null;
+    }
 
     public ArrayList<Order> getOrders() {
         return orderDB.getOrders();
@@ -154,7 +214,6 @@ public class OrderBSL {
     public String checkOut(int orderId) {
         if (order.getPlaced()) {
             if (orderDB.findOrder(orderId)) {
-
                 order.setShipped(true);
                 String cost = String.valueOf(orderDB.getOrderTotalCost().get(orderId) + order.getShippingFees());
                 return "Total Cost: " + "$" + cost;
@@ -163,8 +222,21 @@ public class OrderBSL {
         return "Order not placed";
     }
 
-
-
-
+//    public String checkOutCompoundOrder(ArrayList<Integer> orderIds, int compoundOrderId) {
+//        if (orderDB.findCompoundOrder(compoundOrderId)) {
+//            float totalCost = 0;
+//            for (int orderId : orderIds) {
+//                if (orderDB.findOrder(orderId)) {
+//                    totalCost += orderDB.getOrderTotalCost().get(orderId);
+//                }
+//            }
+//            totalCost += order.getShippingFees();
+//            orderDB.getCompoundOrderTotalCosts().put(compoundOrderId, totalCost);
+//            String cost = String.valueOf(totalCost);
+//            return "Total Cost: " + "$" + cost;
+//        }
+//        return "Compound Order not Found";
+//    }
 
 }
+
