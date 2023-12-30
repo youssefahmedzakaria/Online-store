@@ -1,11 +1,9 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.model;
 
-import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.UserDB;
 import org.springframework.stereotype.Component;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ShoppingCartImp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Component
 public class Order {
@@ -45,7 +43,7 @@ public class Order {
     public ShoppingCartImp getShoppingCartBSL() {
         return shoppingCartBSL;
     }
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 
@@ -69,7 +67,7 @@ public class Order {
         this.orderStatus = status;
     }
 
-    public LocalDateTime getPlacementTime() {return placementTime;}
+    public LocalDateTime getShipmentTime() {return placementTime;}
 
     public void setPlacementTime(LocalDateTime placementTime) {this.placementTime = placementTime;}
 

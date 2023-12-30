@@ -11,7 +11,7 @@ import java.util.*;
 public abstract class OrderImp {
 
     @Autowired
-    protected Order order = new Order();
+    public Order order = new Order();
 
     protected OrderDB orderDB = new OrderDB();
     protected UsersImp userImp = new UsersImp();

@@ -1,9 +1,7 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.OrderDB;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.UserDB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -13,8 +11,9 @@ import java.util.*;
 
 @Service
 public class SimpleOrderImp extends OrderImp {
-    private static final int CANCELLATION_DURATION_LIMIT = 2;
 
+    private static final int CANCELLATION_DURATION_LIMIT = 2;
+    //create empty cons
     @Override
     public String placeOrder(String username) {
         if (userImp.checkUser(username)) {
@@ -57,7 +56,7 @@ public class SimpleOrderImp extends OrderImp {
     }
 
     @Override
-    public String shipOrder(String username,int orderId) {
+    public String shipOrder(String username, int orderId) {
         if (userImp.checkUser(username)) {
             if (order.getPlaced()) {
                 if (findOrder(orderId)) {
@@ -78,8 +77,8 @@ public class SimpleOrderImp extends OrderImp {
             if (order.getShipped()) {
                 if (findOrder(orderId)) {
                     LocalDateTime currentTime = LocalDateTime.now();
-                    LocalDateTime orderPlacementTime = order.getPlacementTime();
-                    Duration duration = Duration.between(orderPlacementTime, currentTime);
+                    LocalDateTime orderShipmentTime = order.getShipmentTime();
+                    Duration duration = Duration.between(orderShipmentTime, currentTime);
                     if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
                         order.setShipped(false);
                         userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + order.getShippingFees());
@@ -94,6 +93,7 @@ public class SimpleOrderImp extends OrderImp {
         }
         return "User not found";
     }
+
     public ArrayList<String> getOrder(int orderId) {
         if (!order.getStatus()) {
             return null;
@@ -104,7 +104,7 @@ public class SimpleOrderImp extends OrderImp {
         }
         orderDetails = new ArrayList<>();
         if (findOrder(orderId)) {
-            for (Product product :  orderDB.getOrderedProducts()) {
+            for (Product product : orderDB.getOrderedProducts()) {
                 String orderProduct = "Product Details: " + product.getName() + " x " + product.getQuantity() + " = $" + (product.getPrice() * product.getQuantity());
                 orderDetails.add(orderProduct);
             }
@@ -120,17 +120,18 @@ public class SimpleOrderImp extends OrderImp {
 
     public String checkOut(int orderId) {
         if (order.getPlaced()) {
-            if(findOrder(orderId)) {
+            if (findOrder(orderId)) {
 
                 order.setShipped(true);
-                    String cost = String.valueOf(order.getShoppingCartBSL().getShoppingCart().getTotalCost());
-                    OrderDB.getOrderTotalCost().put(orderId, order.getShoppingCartBSL().getShoppingCart().getTotalCost());
-                    order.getShoppingCartBSL().clearCart();
-                    return "Total Cost: " + "$" + cost;
-                }
+                String cost = String.valueOf(order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+                OrderDB.getOrderTotalCost().put(orderId, order.getShoppingCartBSL().getShoppingCart().getTotalCost());
+                order.getShoppingCartBSL().clearCart();
+                return "Total Cost: " + "$" + cost;
             }
-        return "Order not placed";
         }
+        return "Order not placed";
+    }
+
     public boolean findOrder(int orderId) {
         for (Order order : orderDB.getOrders()) {
             if (order.getOrderId() == orderId) {
@@ -139,6 +140,8 @@ public class SimpleOrderImp extends OrderImp {
         }
         return false;
     }
+//make a function get simple order by ID
 
 
 }
+

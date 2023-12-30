@@ -12,9 +12,7 @@ import java.util.*;
 @RestController
 public class OrderController {
 
-    @Autowired
-    private  OrderImp orderBSL = new SimpleOrderImp();
-
+    private final OrderImp orderBSL;
     public OrderController(OrderImp orderBSL) {
         this.orderBSL = orderBSL;
     }
