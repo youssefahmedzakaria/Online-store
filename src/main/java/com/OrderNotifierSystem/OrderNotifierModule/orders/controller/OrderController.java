@@ -1,8 +1,5 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.CancelPlacementTemplate;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.CancelShipmentTemplate;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.OrderPlacementTemplate;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.OrderShipmentTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.*;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.CompoundOrder;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.OrderBSL;
@@ -16,6 +13,14 @@ import java.util.*;
 public class OrderController {
     @Autowired
     private final OrderBSL orderBSL;
+    private NotificationsQueue notificationsQueue = new NotificationsQueue();
+    private
+    CancelShipmentTemplate cancelShipmentTemplate = new CancelShipmentTemplate();
+    private CancelPlacementTemplate cancelPlacementTemplate = new CancelPlacementTemplate();
+    private OrderPlacementTemplate orderPlacementTemplate = new OrderPlacementTemplate();
+    private OrderShipmentTemplate orderShipmentTemplate = new OrderShipmentTemplate();
+
+
     public OrderController(OrderBSL orderBSL) {
         this.orderBSL = orderBSL;
     }
@@ -23,6 +28,7 @@ public class OrderController {
 
     @GetMapping ("/placeOrder/{username}")
     public String placeOrder(@PathVariable ("username") String username) {
+
         return orderBSL.placeOrder(username);
     }
 

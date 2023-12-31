@@ -14,14 +14,14 @@ public String cancelShipmentMessage(String username) {
             "Thank you for shopping with us.");
     return notificationTemplate.getContent();
 }
-    public String sendcancelShipmentByEmail(String username, String email){
+    public String sendCancelShipmentByEmail(String username, String email){
         User user = usersBSL.getUser(username);
         if(user.getEmail().equals(email)){
             return "Sending Notification to email: " + email + "/n" + cancelShipmentMessage(username);
         }
         return "Email does not match";
     }
-    public String sendcancelShipmentBySMS(String username, String phone){
+    public String sendCancelShipmentBySMS(String username, String phone){
         User user = usersBSL.getUser(username);
         if(user.getPhone().equals(phone)){
             return "Sending Notification to phone: " + phone + "/n" + cancelShipmentMessage(username);
@@ -39,11 +39,19 @@ public String cancelShipmentMessage(String username) {
         return notificationTemplate.getContent();
     }
 
-    public String sendcancelShipmentByEmailArabic(String username, String email){
+    public String sendCancelShipmentByEmailArabic(String username, String email){
         User user = usersBSL.getUser(username);
         if(user.getEmail().equals(email)){
             return "تم ارسال بريد الكتروني الى: " + email + "/n" + cancelShipmentMessageArabic(username);
         }
         return "الايميل غير متطابق";
+    }
+
+    public String sendCancelShipmentBySMSArabic(String username, String phone){
+        User user = usersBSL.getUser(username);
+        if(user.getPhone().equals(phone)){
+            return "تم ارسال رسالة نصية الى: " + phone + "/n" + cancelShipmentMessageArabic(username);
+        }
+        return "رقم الهاتف غير متطابق";
     }
 }

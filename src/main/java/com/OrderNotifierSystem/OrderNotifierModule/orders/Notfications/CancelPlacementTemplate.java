@@ -48,6 +48,13 @@ public class CancelPlacementTemplate extends NotificationTemplate {
         return "الايميل غير متطابق";
     }
 
+    public String sendCancelPlacementBySMSArabic(String username, String phone){
+        User user = usersBSL.getUser(username);
+        if(user.getPhone().equals(phone)){
+            return "تم ارسال رسالة نصية الى: " + phone + "/n" + CancelPlacementTemplateArabic(username);
+        }
+        return "رقم الهاتف غير متطابق";
+    }
 
 
 }

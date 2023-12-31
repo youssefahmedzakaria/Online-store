@@ -6,6 +6,11 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.service.UsersImp;
 
 public class NotificationTemplate {
     protected static NotificationTemplate notificationTemplate = new NotificationTemplate();
+
+    public static UsersImp getUsersBSL() {
+        return usersBSL;
+    }
+
     protected static UsersImp usersBSL = new UsersImp();
     protected static OrderDB orderDB = new OrderDB();
     protected static UserDB userDB = new UserDB();

@@ -46,4 +46,12 @@ public class OrderShipmentTemplate extends NotificationTemplate{
         }
         return "الايميل غير متطابق";
     }
+
+    public String sendOrderShipmentBySMSArabic(String username, String phone){
+        User user = usersBSL.getUser(username);
+        if(user.getPhone().equals(phone)){
+            return "تم ارسال رسالة نصية الى: " + phone + "/n" + orderShipmentMessageArabic(username);
+        }
+        return "رقم الهاتف غير متطابق";
+    }
 }
