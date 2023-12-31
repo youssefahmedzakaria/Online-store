@@ -101,22 +101,24 @@ public class OrderBSL {
 //    }
 
     public String cancelOrderPlacement(String username, int orderId) {
-        Order order = new Order();
         if (userImp.checkUser(username)) {
-            if (order.getPlaced()) {
+            for (Order order : orderDB.getOrders()) {
                 if (orderDB.findOrder(orderId)) {
-                    order.setPlaced(false);
-                    orderDB.getOrderMap().remove(orderId, orderDB.getOrderMap().get(orderId));
-                    for (Product product : userImp.getUser(username).getShoppingCart().shoppingCart.cart) {
-                        order.getShoppingCartBSL().removeFromCart(username,product.getName());
+                    if (order.getPlaced()) {
+                        order.setPlaced(false);
+                        orderDB.getOrderMap().remove(orderId, orderDB.getOrderMap().get(orderId));
+                        for (Product product : userImp.getUser(username).getShoppingCart().shoppingCart.cart) {
+                            order.getShoppingCartBSL().removeFromCart(username, product.getName());
+                        }
+                        order.setStatus(false);
+                        // set the user's balance to the previous balance
+                        userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + OrderDB.getOrderTotalCost().get(orderId));
+                        return "Order Cancelled";
                     }
-                    order.setStatus(false);
-                    // set the user's balance to the previous balance
-                    userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + OrderDB.getOrderTotalCost().get(orderId));
-                    return "Order Cancelled";
                 }
+                return "Order not Placed";
             }
-            return "Order not Placed";
+            return "Order not found";
         }
         return "User not found";
     }
