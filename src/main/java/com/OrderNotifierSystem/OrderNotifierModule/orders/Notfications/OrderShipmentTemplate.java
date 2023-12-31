@@ -15,15 +15,23 @@ public class OrderShipmentTemplate extends NotificationTemplate{
                 "Your balance is " + user.getBalance() + ".\n" +
                 "Thank you for shopping with us.");
         notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
-        NotificationsQueue.addNotification(notificationTemplate.getContent());
-        return notificationTemplate.getContent();
+        if(notificationMap.get(OrderShipment) == null){
+            notificationMap.put(OrderShipment,1);
+        }else{
+            notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
+
+        }                    return notificationTemplate.getContent();
     }
     public String sendOrderShipmentByEmail(String username, String email){
         User user = usersBSL.getUser(username);
         if(user.getEmail().equals(email)){
             notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
-            NotificationsQueue.addNotification(notificationTemplate.getContent());
-            return "Sending Notification to email: " + email + "/n" + orderShipmentMessage(username);
+            if(notificationMap.get(OrderShipment) == null){
+                notificationMap.put(OrderShipment,1);
+            }else{
+                notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
+
+            }                        return "Sending Notification to email: " + email + "/n" + orderShipmentMessage(username);
         }
         return "Email does not match";
     }
@@ -31,8 +39,12 @@ public class OrderShipmentTemplate extends NotificationTemplate{
         User user = usersBSL.getUser(username);
         if(user.getPhone().equals(phone)){
             notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
-            NotificationsQueue.addNotification(notificationTemplate.getContent());
-            return "Sending Notification to phone: " + phone + "/n" + orderShipmentMessage(username);
+            if(notificationMap.get(OrderShipment) == null){
+                notificationMap.put(OrderShipment,1);
+            }else{
+                notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
+
+            }                        return "Sending Notification to phone: " + phone + "/n" + orderShipmentMessage(username);
         }
         return "Phone does not match";
     }
@@ -45,15 +57,26 @@ public class OrderShipmentTemplate extends NotificationTemplate{
                 "رصيدك هو " + user.getBalance() + ".\n" +
                 "شكرا لتسوقك معنا.");
         notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
-        NotificationsQueue.addNotification(notificationTemplate.getContent());
-        return notificationTemplate.getContent();
+        if(notificationMap.get(OrderShipment) == null){
+            notificationMap.put(OrderShipment,1);
+        }else{
+            notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
+
+        }                    return notificationTemplate.getContent();
     }
 
     public String sendOrderShipmentByEmailArabic(String username, String email){
         User user = usersBSL.getUser(username);
+        if(user == null){
+            return "المستخدم غير موجود";
+        }
         if(user.getEmail().equals(email)){
-            notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
-            NotificationsQueue.addNotification(notificationTemplate.getContent());
+            if(notificationMap.get(OrderShipment) == null){
+                notificationMap.put(OrderShipment,1);
+            }else{
+                notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
+
+            }            NotificationsQueue.addNotification(notificationTemplate.getContent());
             return "تم ارسال بريد الكتروني الى: " + email + "/n" + orderShipmentMessageArabic(username);
         }
         return "الايميل غير متطابق";
@@ -63,8 +86,12 @@ public class OrderShipmentTemplate extends NotificationTemplate{
         User user = usersBSL.getUser(username);
         if(user.getPhone().equals(phone)){
             notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
-            NotificationsQueue.addNotification(notificationTemplate.getContent());
-            return "تم ارسال رسالة نصية الى: " + phone + "/n" + orderShipmentMessageArabic(username);
+            if(notificationMap.get(OrderShipment) == null){
+                notificationMap.put(OrderShipment,1);
+            }else{
+                notificationMap.put(OrderShipment,notificationMap.get(OrderShipment)+1);
+
+            }                        return "تم ارسال رسالة نصية الى: " + phone + "/n" + orderShipmentMessageArabic(username);
         }
         return "رقم الهاتف غير متطابق";
     }

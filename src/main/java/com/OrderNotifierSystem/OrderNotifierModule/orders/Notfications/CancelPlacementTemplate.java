@@ -4,8 +4,7 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 
 public class CancelPlacementTemplate extends NotificationTemplate {
 
-    public String CancelPlaceMent= "OrderCancellation";
-    //make CancelPlaceMent a key in the map and increment the number of notification
+    public String CancelPlaceMent = "OrderCancellation";
 
     public String CancelPlacementTemplate(String username) {
         User user = usersBSL.getUser(username);
@@ -15,28 +14,42 @@ public class CancelPlacementTemplate extends NotificationTemplate {
                 " has been cancelled.\n" +
                 "Your balance is " + user.getBalance() + ".\n" +
                 "Thank you for shopping with us.");
-        notificationMap.put(CancelPlaceMent,notificationMap.get(CancelPlaceMent)+1);
-        //increment the number of notification in the map
+        notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
 
-        NotificationsQueue.addNotification(notificationTemplate.getContent());
+        if (notificationMap.get(CancelPlaceMent) == null) {
+            notificationMap.put(CancelPlaceMent, 1);
+        } else {
+            notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+
+        }
         return notificationTemplate.getContent();
     }
 
-    public String sendCancelPlacementByEmail(String username, String email){
+    public String sendCancelPlacementByEmail(String username, String email) {
         User user = usersBSL.getUser(username);
-        if(user.getEmail().equals(email)){
-            notificationMap.put(CancelPlaceMent,notificationMap.get(CancelPlaceMent)+1);
-            NotificationsQueue.addNotification(notificationTemplate.getContent());
+        if (user.getEmail().equals(email)) {
+            notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+            if (notificationMap.get(CancelPlaceMent) == null) {
+                notificationMap.put(CancelPlaceMent, 1);
+            } else {
+                notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+
+            }
             return "Sending Notification to email: " + email + "/n" + CancelPlacementTemplate(username);
         }
         return "Email does not match";
     }
 
-    public String sendCancelPlacementBySMS(String username, String phone){
+    public String sendCancelPlacementBySMS(String username, String phone) {
         User user = usersBSL.getUser(username);
-        if(user.getPhone().equals(phone)){
-            notificationMap.put(CancelPlaceMent,notificationMap.get(CancelPlaceMent)+1);
-            NotificationsQueue.addNotification(notificationTemplate.getContent());
+        if (user.getPhone().equals(phone)) {
+            notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+            if (notificationMap.get(CancelPlaceMent) == null) {
+                notificationMap.put(CancelPlaceMent, 1);
+            } else {
+                notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+
+            }
             return "Sending Notification to phone: " + phone + "/n" + CancelPlacementTemplate(username);
         }
         return "Phone does not match";
@@ -49,26 +62,41 @@ public class CancelPlacementTemplate extends NotificationTemplate {
                 "تم الغاء طلبك.\n" +
                 "رصيدك هو " + user.getBalance() + ".\n" +
                 "شكرا لتسوقك معنا.");
-        notificationMap.put(CancelPlaceMent,notificationMap.get(CancelPlaceMent)+1);
+        if (notificationMap.get(CancelPlaceMent) == null) {
+            notificationMap.put(CancelPlaceMent, 1);
+        } else {
+            notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+
+        }
         NotificationsQueue.addNotification(notificationTemplate.getContent());
         return notificationTemplate.getContent();
     }
 
-    public String sendCancelPlacementByEmailArabic(String username, String email){
+    public String sendCancelPlacementByEmailArabic(String username, String email) {
         User user = usersBSL.getUser(username);
-        if(user.getEmail().equals(email)){
-            notificationMap.put(CancelPlaceMent,notificationMap.get(CancelPlaceMent)+1);
+        if (user.getEmail().equals(email)) {
+            if (notificationMap.get(CancelPlaceMent) == null) {
+                notificationMap.put(CancelPlaceMent, 1);
+            } else {
+                notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+
+            }
             NotificationsQueue.addNotification(notificationTemplate.getContent());
             return "تم ارسال بريد الكتروني الى: " + email + "/n" + CancelPlacementTemplateArabic(username);
         }
         return "الايميل غير متطابق";
     }
 
-    public String sendCancelPlacementBySMSArabic(String username, String phone){
+    public String sendCancelPlacementBySMSArabic(String username, String phone) {
         User user = usersBSL.getUser(username);
-        if(user.getPhone().equals(phone)){
-            notificationMap.put(CancelPlaceMent,notificationMap.get(CancelPlaceMent)+1);
-            NotificationsQueue.addNotification(notificationTemplate.getContent());
+        if (user.getPhone().equals(phone)) {
+            notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+            if (notificationMap.get(CancelPlaceMent) == null) {
+                notificationMap.put(CancelPlaceMent, 1);
+            } else {
+                notificationMap.put(CancelPlaceMent, notificationMap.get(CancelPlaceMent) + 1);
+
+            }
             return "تم ارسال رسالة نصية الى: " + phone + "/n" + CancelPlacementTemplateArabic(username);
         }
         return "رقم الهاتف غير متطابق";

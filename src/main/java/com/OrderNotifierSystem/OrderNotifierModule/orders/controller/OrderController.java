@@ -13,6 +13,8 @@ import java.util.*;
 public class OrderController {
     @Autowired
     private final OrderBSL orderBSL;
+
+
     private NotificationsQueue notificationsQueue = new NotificationsQueue();
     private
     CancelShipmentTemplate cancelShipmentTemplate = new CancelShipmentTemplate();
