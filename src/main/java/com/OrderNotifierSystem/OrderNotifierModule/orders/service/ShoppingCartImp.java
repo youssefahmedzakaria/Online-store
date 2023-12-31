@@ -1,6 +1,7 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.ShoppingCart;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -8,25 +9,23 @@ import java.util.ArrayList;
 
 @NoArgsConstructor
 public class ShoppingCartImp {
+   private final static ProductDBImp productBSL = new ProductDBImp();
+    private final static UsersImp user = new UsersImp();
 
-
-    private final static ShoppingCart shoppingCart = new ShoppingCart();
-    ProductDBImp productBSL = new ProductDBImp();
-    public ShoppingCart getShoppingCart() {
-        return shoppingCart;
-    }
-
-    public String addToCart(String productName, int Quantity) {
+    public String addToCart(String username, String productName, int Quantity) {
+        if(!user.checkUser(username)){
+            return "User not found";
+        }
         Product product = productBSL.findProduct(productName);
         if (product != null) {
             if (product.getQuantity() >= Quantity) {
-                if (shoppingCart.getCart() == null) {
-                    shoppingCart.setTotalCost((float) (product.getPrice() * Quantity));
+                if (user.getUser(username).getShoppingCart().getCart() == null) {
+                    user.getUser(username).getShoppingCart().setTotalCost((float) (product.getPrice() * Quantity));
                     product.setQuantity(product.getQuantity() - Quantity);
                 } else {
-                    shoppingCart.setTotalCost((float) (shoppingCart.getTotalCost() + product.getPrice() * Quantity));
+                    user.getUser(username).getShoppingCart().setTotalCost((float) (user.getUser(username).getShoppingCart().getTotalCost() + product.getPrice() * Quantity));
                     product.setQuantity(product.getQuantity() - Quantity);
-                    shoppingCart.setQuantity(shoppingCart.getQuantity() + Quantity);
+                    user.getUser(username).getShoppingCart().setQuantity(user.getUser(username).getShoppingCart().getQuantity() + Quantity);
                 }
             } else {
                 return "Quantity not available";
@@ -35,26 +34,32 @@ public class ShoppingCartImp {
             return "Product not found";
         }
         Product cartProduct = new Product(product.getName(), Quantity, product.getPrice());
-        shoppingCart.getCart().add(cartProduct);
+        user.getUser(username).getShoppingCart().getCart().add(cartProduct);
         return Quantity + " " + productName+ "(s)" + " added to cart";
     }
 
-    public ArrayList<String> DisplayCart() {
+    public ArrayList<String> DisplayCart(String username) {
+        if(!user.checkUser(username)){
+            return null;
+        }
         ArrayList<String> cartProducts = new ArrayList<>();
-        for (Product product : shoppingCart.getCart()) {
+        for (Product product : user.getUser(username).getShoppingCart().getCart()) {
             String cartProduct = product.getName() + " x " + product.getQuantity() + " = $" + product.getPrice() * product.getQuantity();
             cartProducts.add(cartProduct);
         }
         return cartProducts;
     }
-    public String removeFromCart(String productName) {
+    public String removeFromCart(String username,String productName) {
+        if(!user.checkUser(username)){
+            return "User not found";
+        }
         Product product = productBSL.findProduct(productName);
         if (product.getName() != null) {
-            for (Product cartProduct : shoppingCart.getCart()) {
+            for (Product cartProduct : user.getUser(username).getShoppingCart().getCart()) {
                 if (cartProduct.getName().equals(productName)) {
-                    shoppingCart.setTotalCost((float) (shoppingCart.getTotalCost() - cartProduct.getPrice() * cartProduct.getQuantity()));
+                    user.getUser(username).getShoppingCart().setTotalCost((float) (user.getUser(username).getShoppingCart().getTotalCost() - cartProduct.getPrice() * cartProduct.getQuantity()));
                     product.setQuantity(product.getQuantity() + cartProduct.getQuantity());
-                    shoppingCart.getCart().remove(cartProduct);
+                    user.getUser(username).getShoppingCart().getCart().remove(cartProduct);
                     return productName + " removed from cart";
                 }
             }
@@ -64,15 +69,18 @@ public class ShoppingCartImp {
         return "Product not found";
     }
 
-    public void clearCart() {
-        shoppingCart.getCart().clear();
-        shoppingCart.setTotalCost(0);
-        shoppingCart.setQuantity(0);
+    public void clearCart(String username){
+        user.getUser(username).getShoppingCart().getCart().clear();
+        user.getUser(username).getShoppingCart().setTotalCost(0);
+        user.getUser(username).getShoppingCart().setQuantity(0);
     }
 
 
 
-    public float getTotalCost() {
-        return shoppingCart.getTotalCost();
+    public float getTotalCost(String username) {
+        return user.getUser(username).getShoppingCart().getTotalCost();
+    }
+    public UsersImp getUserImp() {
+        return user;
     }
 }

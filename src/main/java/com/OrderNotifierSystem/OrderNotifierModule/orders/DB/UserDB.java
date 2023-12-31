@@ -12,4 +12,5 @@ public class UserDB {
     public static ArrayList<User> getUsers() {
         return users;
     }
+
 }

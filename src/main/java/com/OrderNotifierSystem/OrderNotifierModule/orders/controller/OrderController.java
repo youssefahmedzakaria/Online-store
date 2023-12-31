@@ -2,6 +2,7 @@ package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.CompoundOrder;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.OrderBSL;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +10,7 @@ import java.util.*;
 
 @RestController
 public class OrderController {
-
+@Autowired
     private final OrderBSL orderBSL;
     public OrderController(OrderBSL orderBSL) {
         this.orderBSL = orderBSL;
@@ -41,9 +42,9 @@ public class OrderController {
         return orderBSL.getOrder(orderId);
     }
 
-    @GetMapping("/checkout/{orderId}")
-    public ResponseEntity<String> checkout(@PathVariable("orderId") int orderId) {
-        return ResponseEntity.ok(orderBSL.checkOut(orderId));
+    @GetMapping("/checkout/{username}/{orderId}")
+    public ResponseEntity<String> checkout( @PathVariable("username") String username ,@PathVariable("orderId") int orderId) {
+        return ResponseEntity.ok(orderBSL.checkOut(username,orderId));
     }
     @GetMapping("/shipOrder/{username}/{orderId}")
     public String shipOrder(@PathVariable("orderId") int orderId, @PathVariable("username") String username) {

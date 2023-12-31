@@ -2,6 +2,7 @@ package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
 
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.UserDB;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

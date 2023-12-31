@@ -13,17 +13,17 @@ public class ShoppingCartController {
 
     private ShoppingCartImp shoppingCartBSL = new ShoppingCartImp();
 
-    @GetMapping("/addToCart/{productName}/{quantity}")
-    public String addToCart(@PathVariable("productName") String productName, @PathVariable("quantity") int quantity) {
-        return shoppingCartBSL.addToCart(productName, quantity);
+    @GetMapping("/addToCart/{username}/{productName}/{quantity}")
+    public String addToCart( @PathVariable("username") String username, @PathVariable("productName") String productName, @PathVariable("quantity") int quantity) {
+        return shoppingCartBSL.addToCart(username,productName, quantity);
     }
-    @DeleteMapping("/removeProduct/{productName}")
-    public String removeProduct(@PathVariable("productName") String productName) {
-        return shoppingCartBSL.removeFromCart(productName);
+    @DeleteMapping("/removeProduct/{username}/{productName}")
+    public String removeProduct(@PathVariable("username") String username, @PathVariable("productName") String productName) {
+        return shoppingCartBSL.removeFromCart(username,productName);
     }
-    @GetMapping("/displayCart")
-    public ResponseEntity <ArrayList<String>> displayCart() {
-        return ResponseEntity.ok(shoppingCartBSL.DisplayCart());
+    @GetMapping("/displayCart/{username}")
+        public ResponseEntity <ArrayList<String>> displayCart(@PathVariable("username") String username) {
+        return ResponseEntity.ok(shoppingCartBSL.DisplayCart(username));
     }
 
 }
