@@ -33,7 +33,7 @@ public class OrderController {
     }
 
     @GetMapping("/getOrders")
-    public ArrayList<Order> getOrders() {
+    public ArrayList<String> getOrders() {
         return orderBSL.getOrders();
     }
 
@@ -54,4 +54,25 @@ public class OrderController {
     public String cancelOrderShipping(@PathVariable("orderId") int orderId, @PathVariable("username") String username) {
         return orderBSL.cancelOrderShipping(username,orderId);
     }
+    @GetMapping("/cancelCompoundOrder/{orderId}")
+    public String CancelOrdersPlacements(@PathVariable("orderId") int orderId) {
+        return orderBSL.CancelOrdersPlacements(orderId);
+    }
+    @GetMapping("/ShipCompoundOrder/{orderId}")
+    public String ShipCompoundOrder(@PathVariable("orderId") int orderId) {
+        return orderBSL.ShipCompoundOrder(orderId);
+    }
+    @GetMapping("/cancelCompoundShipping/{orderId}")
+    public String CancelOrderCompoundShipment(@PathVariable("orderId") int orderId) {
+        return orderBSL.CancelOrderCompoundShipment(orderId);
+    }
+    @GetMapping("/getCompoundOrder/{orderId}")
+    public ArrayList<String> getCompoundOrder(@PathVariable("orderId") int orderId) {
+        return orderBSL.getCompoundOrder(orderId);
+    }
+    @GetMapping("/CheckoutCompoundOrder/{orderId}")
+    public String CompoundOrderCheckout(@PathVariable("orderId") int orderId) {
+        return orderBSL.CompoundOrderCheckout(orderId);
+    }
+
 }

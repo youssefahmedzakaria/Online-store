@@ -12,6 +12,20 @@ import java.util.*;
 public class UsersImp {
     private static UserDB users = new UserDB();
 
+    public String viewUser(String username) {
+        for (User user : users.getUsers()) {
+            if (user.getUsername().equals(username)) {
+                return "username: " + user.getUsername() + "\n" +
+                        "email: " + user.getEmail() + "\n" +
+                        "password: " + user.getPassword() + "\n" +
+                        "address: " + user.getAddress() + "\n" +
+                        "balance: " + user.getBalance() + "\n" +
+                        "phone: " + user.getPhone() + "\n";
+            }
+            return "User not found";
+        }
+        return "User not found";
+    }
 
 
     public void createUser(User user) {

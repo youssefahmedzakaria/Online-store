@@ -1,5 +1,6 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Component;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ShoppingCartImp;
 
@@ -10,6 +11,16 @@ import java.util.ArrayList;
 public class Order {
     private LocalDateTime placementTime;
 
+    public LocalDateTime getCompoundOrderTime() {
+        return CompoundOrderTime;
+    }
+
+    public void setCompoundOrderTime(LocalDateTime compoundOrderTime) {
+        CompoundOrderTime = compoundOrderTime;
+    }
+
+    //create a local time variable for compound order
+    private LocalDateTime CompoundOrderTime;
     // Constructor and other methods
     static int counter = 1;
     private boolean isPlaced = false;

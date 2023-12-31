@@ -32,20 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/get/{username}")
-    public User getPerson(@PathVariable("username") String username) {
-        boolean flag;
-        System.out.println("in get with username:" + username);
-
-        flag = usersBSL.checkUser(username);
-        if (!flag) {
-            System.out.println("User Doesn't Exist");
-            return null;
-        }
-        return usersBSL.getUser(username);
-    }
-
-    @GetMapping("/get")
-    public List<User> get() {
-        return usersBSL.getUsers();
+    public String getPerson(@PathVariable("username") String username) {
+        return usersBSL.viewUser(username);
     }
 }
