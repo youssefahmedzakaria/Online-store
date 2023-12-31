@@ -44,6 +44,7 @@ public class OrderBSL {
         }
         return "User not found";
     }
+
     public String placeOrders(ArrayList<String> usernames) {
         for (String username : usernames) {
             if(placeOrder(username).equals("Cart is empty")) {
@@ -157,6 +158,7 @@ public class OrderBSL {
         if (!userImp.checkUser(username)) {
             return "User not found";
         }
+
         for (Order order : userImp.getUser(username).getOrders()) {
             if (order.getOrderId() == orderId) {
                     String cost = String.valueOf(orderDB.getOrderTotalCost().get(orderId) + order.getShippingFees());
@@ -164,6 +166,6 @@ public class OrderBSL {
                 }
             }
 
-        return "Order not placed";
+        return "Order not placed yet";
     }
 }

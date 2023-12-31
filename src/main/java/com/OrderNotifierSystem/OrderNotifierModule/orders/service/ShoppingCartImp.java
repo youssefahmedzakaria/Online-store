@@ -5,27 +5,31 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @NoArgsConstructor
 public class ShoppingCartImp {
-   private final static ProductDBImp productBSL = new ProductDBImp();
-    private final static UsersImp user = new UsersImp();
+
+
+    public final static ProductDBImp productBSL = new ProductDBImp();
+    private final UsersImp user = new UsersImp();
+    public ShoppingCart shoppingCart = new ShoppingCart();
 
     public String addToCart(String username, String productName, int Quantity) {
-        if(!user.checkUser(username)){
-            return "User not found";
-        }
         Product product = productBSL.findProduct(productName);
+        UsersImp usersImp = new UsersImp();
+        usersImp.getUser(username);
         if (product != null) {
             if (product.getQuantity() >= Quantity) {
-                if (user.getUser(username).getShoppingCart().getCart() == null) {
-                    user.getUser(username).getShoppingCart().setTotalCost((float) (product.getPrice() * Quantity));
+                if (usersImp.getUser(username).getShoppingCart().shoppingCart.getCart() == null) {
+                    usersImp.getUser(username).getShoppingCart().shoppingCart.setTotalCost((float) (product.getPrice() * Quantity));
                     product.setQuantity(product.getQuantity() - Quantity);
                 } else {
-                    user.getUser(username).getShoppingCart().setTotalCost((float) (user.getUser(username).getShoppingCart().getTotalCost() + product.getPrice() * Quantity));
+                    usersImp.getUser(username).getShoppingCart().shoppingCart.setTotalCost((float) (usersImp.getUser(username).getShoppingCart().shoppingCart.getTotalCost() + product.getPrice() * Quantity));
                     product.setQuantity(product.getQuantity() - Quantity);
-                    user.getUser(username).getShoppingCart().setQuantity(user.getUser(username).getShoppingCart().getQuantity() + Quantity);
+                    usersImp.getUser(username).getShoppingCart().shoppingCart.setQuantity(usersImp.getUser(username).getShoppingCart().shoppingCart.getQuantity() + Quantity);
                 }
             } else {
                 return "Quantity not available";
@@ -34,12 +38,11 @@ public class ShoppingCartImp {
             return "Product not found";
         }
         Product cartProduct = new Product(product.getName(), Quantity, product.getPrice());
-        user.getUser(username).getShoppingCart().getCart().add(cartProduct);
-        return Quantity + " " + productName+ "(s)" + " added to cart";
+        usersImp.getUser(username).getShoppingCart().shoppingCart.getCart().add(cartProduct);
+        return Quantity + " " + productName + "(s)" + " added to cart";
     }
-
     public ArrayList<String> DisplayCart(String username) {
-        if(!user.checkUser(username)){
+        if (!user.checkUser(username)) {
             return null;
         }
         ArrayList<String> cartProducts = new ArrayList<>();
@@ -49,8 +52,9 @@ public class ShoppingCartImp {
         }
         return cartProducts;
     }
-    public String removeFromCart(String username,String productName) {
-        if(!user.checkUser(username)){
+
+    public String removeFromCart(String username, String productName) {
+        if (!user.checkUser(username)) {
             return "User not found";
         }
         Product product = productBSL.findProduct(productName);
@@ -69,17 +73,17 @@ public class ShoppingCartImp {
         return "Product not found";
     }
 
-    public void clearCart(String username){
-        user.getUser(username).getShoppingCart().getCart().clear();
-        user.getUser(username).getShoppingCart().setTotalCost(0);
-        user.getUser(username).getShoppingCart().setQuantity(0);
+    public void clearCart(String username) {
+        user.getUser(username).getShoppingCart().shoppingCart.cart.clear();
+        user.getUser(username).getShoppingCart().shoppingCart.setTotalCost(0);
+        user.getUser(username).getShoppingCart().shoppingCart.setQuantity(0);
     }
-
 
 
     public float getTotalCost(String username) {
         return user.getUser(username).getShoppingCart().getTotalCost();
     }
+
     public UsersImp getUserImp() {
         return user;
     }

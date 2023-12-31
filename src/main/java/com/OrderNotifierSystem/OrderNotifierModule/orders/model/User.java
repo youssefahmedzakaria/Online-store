@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static com.OrderNotifierSystem.OrderNotifierModule.orders.service.ShoppingCartImp.productBSL;
+
 @Component
 public class User {
     private static final ArrayList<Order> orders = new ArrayList<>();
@@ -67,6 +69,7 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
     public ArrayList<Order> getOrders() {
         return orders;
     }
@@ -74,5 +77,7 @@ public class User {
         return shoppingCart;
     }
 
-
+    public void setCurrentorder(Order currentorder) {
+        this.currentorder = currentorder;
+    }
 }

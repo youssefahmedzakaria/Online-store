@@ -6,7 +6,7 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 import java.util.*;
 
 public class OrderDB {
-    private static final ArrayList<Order> orders = new ArrayList<>();
+    private  final ArrayList<Order> orders = new ArrayList<>();
     private static final ArrayList<Order> compoundOrders = new ArrayList<>();
     private static final ArrayList<Product> orderedProducts = new ArrayList<>();
     static final Map<Integer, ArrayList<String>> orderMap = new HashMap<>();
@@ -14,11 +14,8 @@ public class OrderDB {
     static final Map<Integer, Float> CompoundOrderTotalCosts = new HashMap<>();
 
 
-    public static ArrayList<Order> getOrders() {
+    public  ArrayList<Order> getOrders() {
         return orders;
-    }
-    public static ArrayList<Product> getOrderedProducts() {
-        return orderedProducts;
     }
     public static Map<Integer, ArrayList<String>> getOrderMap() {
         return orderMap;

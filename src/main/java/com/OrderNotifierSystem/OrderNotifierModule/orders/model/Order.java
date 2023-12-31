@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.ShoppingCartImp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Component
 public class Order {
@@ -69,7 +70,6 @@ public class Order {
     }
 
     public LocalDateTime getShipmentTime() {return placementTime;}
-
     public void setPlacementTime(LocalDateTime placementTime) {this.placementTime = placementTime;}
     public int getCompoundOrderId() {
         return compoundOrderId;
@@ -77,9 +77,7 @@ public class Order {
     public void setCompoundOrderId(int compoundOrderId) {
         this.compoundOrderId = compoundOrderId;
     }
-
-
-}
+ }
 
 
 

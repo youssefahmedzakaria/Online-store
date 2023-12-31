@@ -10,7 +10,7 @@ import java.util.*;
 
 @RestController
 public class OrderController {
-@Autowired
+    @Autowired
     private final OrderBSL orderBSL;
     public OrderController(OrderBSL orderBSL) {
         this.orderBSL = orderBSL;
