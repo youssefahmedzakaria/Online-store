@@ -1,4 +1,8 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.CancelPlacementTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.CancelShipmentTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.OrderPlacementTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.OrderShipmentTemplate;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.CompoundOrder;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.OrderBSL;
@@ -74,5 +78,4 @@ public class OrderController {
     public String CompoundOrderCheckout(@PathVariable("orderId") int orderId) {
         return orderBSL.CompoundOrderCheckout(orderId);
     }
-
 }

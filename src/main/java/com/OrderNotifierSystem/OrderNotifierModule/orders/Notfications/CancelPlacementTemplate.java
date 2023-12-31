@@ -14,7 +14,7 @@ public class CancelPlacementTemplate extends NotificationTemplate {
         return notificationTemplate.getContent();
     }
 
-    public String sendByEmail(String username, String email){
+    public String sendCancelPlacementByEmail(String username, String email){
         User user = usersBSL.getUser(username);
         if(user.getEmail().equals(email)){
             return "Sending Notification to email: " + email + "/n" + CancelPlacementTemplate(username);
@@ -22,12 +22,30 @@ public class CancelPlacementTemplate extends NotificationTemplate {
         return "Email does not match";
     }
 
-    public String sendBySMS(String username, String phone){
+    public String sendCancelPlacementBySMS(String username, String phone){
         User user = usersBSL.getUser(username);
         if(user.getPhone().equals(phone)){
             return "Sending Notification to phone: " + phone + "/n" + CancelPlacementTemplate(username);
         }
         return "Phone does not match";
+    }
+
+    public String CancelPlacementTemplateArabic(String username) {
+        User user = usersBSL.getUser(username);
+        notificationTemplate.setSubject("تأكيد الغاء الطلب");
+        notificationTemplate.setContent("عزيزي " + username + ",\n" +
+                "تم الغاء طلبك.\n" +
+                "رصيدك هو " + user.getBalance() + ".\n" +
+                "شكرا لتسوقك معنا.");
+        return notificationTemplate.getContent();
+    }
+
+    public String sendCancelPlacementByEmailArabic(String username, String email){
+        User user = usersBSL.getUser(username);
+        if(user.getEmail().equals(email)){
+            return "تم ارسال بريد الكتروني الى: " + email + "/n" + CancelPlacementTemplateArabic(username);
+        }
+        return "الايميل غير متطابق";
     }
 
 

@@ -14,19 +14,37 @@ public class OrderPlacementTemplate extends NotificationTemplate {
         return notificationTemplate.getContent();
     }
 
-    public String sendByEmail(String username, String email){
+    public String sendOrderPlacementByEmail(String username, String email){
         User user = usersBSL.getUser(username);
         if(user.getEmail().equals(email)){
             return "Sending Notification to email: " + email + "/n" + orderPlacementMessage(username);
         }
         return "Email does not match";
     }
-    public String sendBySMS(String username, String phone){
+    public String sendOrderPlacementBySMS(String username, String phone){
         User user = usersBSL.getUser(username);
         if(user.getPhone().equals(phone)){
             return "Sending Notification to phone: " + phone + "/n" + orderPlacementMessage(username);
         }
         return "Phone does not match";
     }
+    //give the user the option to choose the language
 
+    public String orderPlacementMessageArabic(String username) {
+        User user = usersBSL.getUser(username);
+        notificationTemplate.setSubject("تأكيد طلب");
+        notificationTemplate.setContent("عزيزي " + username + ",\n" +
+                "تم تأكيد طلبك.\n" +
+                "رصيدك هو " + user.getBalance() + ".\n" +
+                "شكرا لتسوقك معنا.");
+        return notificationTemplate.getContent();
+    }
+
+    public String sendOrderPlacementByEmailArabic(String username, String email){
+        User user = usersBSL.getUser(username);
+        if(user.getEmail().equals(email)){
+            return "تم ارسال بريد الكتروني الى: " + email + "/n" + orderPlacementMessageArabic(username);
+        }
+        return "الايميل غير متطابق";
+    }
 }
