@@ -11,6 +11,7 @@ public class OrderDB {
     private static final ArrayList<Product> orderedProducts = new ArrayList<>();
     static final Map<Integer, ArrayList<String>> orderMap = new HashMap<>();
     static final Map<Integer, Float> orderTotalCosts = new HashMap<>();
+    static final Map<Integer, Float> CompoundOrderTotalCosts = new HashMap<>();
 
 
     public static ArrayList<Order> getOrders() {
@@ -25,9 +26,14 @@ public class OrderDB {
     public static Map<Integer, Float> getOrderTotalCost() {
         return orderTotalCosts;
     }
+    public static Map<Integer, Float> getCompoundOrderTotalCosts() {
+        return CompoundOrderTotalCosts;
+    }
+
     public static ArrayList<Order> getCompoundOrder() {
         return compoundOrders;
     }
+
     public boolean findOrder(int orderId) {
         for (Order order : orders) {
             if (order.getOrderId() == orderId) {
