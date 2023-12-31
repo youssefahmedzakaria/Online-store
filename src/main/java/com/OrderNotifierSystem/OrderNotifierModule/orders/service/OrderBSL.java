@@ -4,6 +4,11 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.OrderDB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.controller.ShoppingCartController;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.*;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.UsersImp;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.CancelPlacementTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.CancelShipmentTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.OrderPlacementTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.OrderShipmentTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.NotificationsQueue;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
@@ -17,10 +22,8 @@ import java.util.Map;
 public class OrderBSL {
     static int counter = 1;
     private static final int CANCELLATION_DURATION_LIMIT = 2;
-
     private OrderDB orderDB = new OrderDB();
     private  UsersImp userImp = new UsersImp();
-
 
     public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
         for (Product product : list1) {
@@ -29,9 +32,10 @@ public class OrderBSL {
     }
     public String placeOrder(String username) {
         Order order = new Order();
+        OrderPlacementTemplate placementNotification = new OrderPlacementTemplate();
         if (userImp.checkUser(username)) {
 //            User user = imp.getUser(username);
-            ShoppingCartController shoppingCartController = new ShoppingCartController();
+           // ShoppingCartController shoppingCartController = new ShoppingCartController();
             if (userImp.getUser(username).getShoppingCart().shoppingCart.cart.isEmpty()) {
                 return "Cart is empty";
             }
@@ -49,6 +53,7 @@ public class OrderBSL {
             orderDB.getOrderedProducts().put(order.getOrderId(), new ArrayList<>());
             CopyList(userImp.getUser(username).getShoppingCart().shoppingCart.cart, orderDB.getOrderedProducts().get(userImp.getUser(username).getCurrentorder().getOrderId()));
             userImp.getUser(username).getShoppingCart().shoppingCart.cart.clear();
+            //placementNotification.sendOrderPlacementBySMS(username, userImp.getUser(username).getPhone());
             return "Order placed successfully \n " + "Your Order ID is: " + userImp.getUser(username).getCurrentorder().getOrderId();
         }
         return "User not found";
@@ -56,6 +61,7 @@ public class OrderBSL {
 
     public String placeOrders(ArrayList<String> usernames) {
         Order order = new Order();
+       // OrderPlacementTemplate placementNotification = new OrderPlacementTemplate();
         Float TotalCost = 0f;
         ArrayList<Order> individualOrders = new ArrayList<>();
         for (String username : usernames) {
@@ -65,6 +71,7 @@ public class OrderBSL {
                 return "User not found";
             }
 
+         //   placementNotification.sendOrderPlacementBySMS(username, userImp.getUser(username).getPhone());
             Order individualOrder = userImp.getUser(username).getCurrentorder();
             individualOrders.add(individualOrder);
             TotalCost += OrderDB.getOrderTotalCost().get(individualOrder.getOrderId());
@@ -77,9 +84,11 @@ public class OrderBSL {
     }
 
     public String CancelOrdersPlacements(int compoundOrderId){
+        //CancelPlacementTemplate cancelPlacementNotification = new CancelPlacementTemplate();
         if(orderDB.findCompoundOrder(compoundOrderId)) {
             for (Order order : orderDB.getCompoundOrders().get(compoundOrderId)) {
                 cancelOrderPlacement(order.getUser().getUsername(), order.getOrderId());
+          //      cancelPlacementNotification.sendCancelPlacementBySMS(order.getUser().getUsername(), order.getUser().getPhone());
             }
 
             return "Compound Order Cancelled";
@@ -103,6 +112,7 @@ public class OrderBSL {
 
     public String cancelOrderPlacement(String username, int orderId) {
         if (userImp.checkUser(username)) {
+            //CancelPlacementTemplate cancelPlacementNotification = new CancelPlacementTemplate();
             for (Order order : orderDB.getOrders()) {
                 if (orderDB.findOrder(orderId)) {
                     if (order.getPlaced()) {
@@ -114,6 +124,7 @@ public class OrderBSL {
                         order.setStatus(false);
                         // set the user's balance to the previous balance
                         userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + OrderDB.getOrderTotalCost().get(orderId));
+                     //   cancelPlacementNotification.sendCancelPlacementBySMS(username, userImp.getUser(username).getPhone());
                         return "Order Cancelled";
                     }
                 }
@@ -125,6 +136,7 @@ public class OrderBSL {
     }
 
     public String shipOrder(String username, int orderId) {
+     //   OrderShipmentTemplate shipmentNotification = new OrderShipmentTemplate();
         for (Order order : orderDB.getOrders()) {
             if (userImp.checkUser(username)) {
                 if (orderDB.findOrder(orderId)) {
@@ -132,6 +144,7 @@ public class OrderBSL {
                         order.setShipped(true);
                         order.setPlacementTime(LocalDateTime.now());
                         userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() - order.getShippingFees());
+       //                shipmentNotification.sendOrderShipmentBySMS(username, userImp.getUser(username).getPhone());
                         return "Order Shipped";
                     }
                 }
@@ -143,17 +156,20 @@ public class OrderBSL {
     }
 
     public String ShipCompoundOrder(int CompoundOrderID){
+        //OrderShipmentTemplate shipmentNotification = new OrderShipmentTemplate();
         if(orderDB.findCompoundOrder(CompoundOrderID)){
 
             for (Order order : orderDB.getCompoundOrders().get(CompoundOrderID)) {
                 shipOrder(order.getUser().getUsername(), order.getOrderId());
                 order.setCompoundOrderTime(LocalDateTime.now());
+            //    shipmentNotification.sendOrderShipmentBySMS(order.getUser().getUsername(), order.getUser().getPhone());
             }
             return "Compound Order Shipped";
         }
         return "Compound Order not found";
     }
     public String CancelOrderCompoundShipment(int CompoundOrderID ) {
+        //CancelShipmentTemplate cancelShipmentNotification = new CancelShipmentTemplate();
         if (orderDB.findCompoundOrder(CompoundOrderID)) {
             LocalDateTime currentTime = LocalDateTime.now();
 
@@ -161,9 +177,11 @@ public class OrderBSL {
                 Duration duration = Duration.between(order.getCompoundOrderTime(), currentTime);
                 if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
                     cancelOrderShipping(order.getUser().getUsername(), order.getOrderId());
+          //      cancelShipmentNotification.sendCancelShipmentBySMS(order.getUser().getUsername(), order.getUser().getPhone());
                 } else {
                     return "Shipment Cancellation period has expired";
                 }
+
             }
             return "Compound Order Shipping Cancelled";
         }
@@ -172,6 +190,7 @@ public class OrderBSL {
 
     public String cancelOrderShipping(String username, int orderId) {
         Order order = new Order();
+        //CancelShipmentTemplate cancelShipmentNotification = new CancelShipmentTemplate();
         if (userImp.checkUser(username)) {
             if (order.getShipped()) {
                 if (orderDB.findOrder(orderId)) {
@@ -181,7 +200,7 @@ public class OrderBSL {
                     if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
                         order.setShipped(false);
                         userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + order.getShippingFees());
-
+          //              cancelShipmentNotification.sendCancelShipmentBySMS(username, userImp.getUser(username).getPhone());
                         return "Shipping Cancelled";
                     } else {
                         return "Shipment Cancellation period has expired";
@@ -256,9 +275,11 @@ public class OrderBSL {
 
         for (Order order : OrderDB.getOrdersMap().values()) {
                     String cost = String.valueOf(orderDB.getOrderTotalCost().get(orderId) + order.getShippingFees());
+                  //  NotificationsQueue.popQueue();
                     return "Total Cost: " + "$" + cost +"    " + order.getOrderId();
+         }
 
-            }
+
 
         return "Order not placed yet";
     }
@@ -270,7 +291,8 @@ public class OrderBSL {
 //return the total cost
         if (orderDB.findCompoundOrder(CompoundOrderID)) {
                 String cost = String.valueOf(orderDB.getCompoundOrderTotalCosts().get(CompoundOrderID));
-                return "Total Cost: " + "$" + cost +"    " + CompoundOrderID;
+         //   NotificationsQueue.popQueue();
+            return "Total Cost: " + "$" + cost +"    " + CompoundOrderID;
         }
         return "Compound Order not found";
     }

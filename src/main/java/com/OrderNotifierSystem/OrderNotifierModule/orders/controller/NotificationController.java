@@ -23,11 +23,9 @@ public class NotificationController {
         orderShipmentTemplate = new OrderShipmentTemplate();
 
     }
-
     @GetMapping("/sendPlacementNotificationAr/{username}/{email}")
     public String sendOrderPlacementByEmailAndSMS(@PathVariable("username") String username, @PathVariable("email") String email) {
         return orderPlacementTemplate.sendOrderPlacementByEmailArabic(username,email);
-
     }
     @GetMapping("/sendPlacementNotificationAr/{username}/{phoneNumber}")
     public String sendOrderPlacementBySMSAr(@PathVariable("username") String username, @PathVariable("phoneNumber") String phoneNumber) {

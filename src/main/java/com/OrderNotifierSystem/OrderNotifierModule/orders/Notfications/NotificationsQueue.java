@@ -9,20 +9,24 @@ import java.util.Queue;
 
 public class NotificationsQueue {
 
-    OrderDB orderDB = new OrderDB();
-    private static Queue<NotificationTemplate> notificationQueue = new java.util.LinkedList<>();
+    private static Queue<String> notificationQueue = new java.util.LinkedList<>();
 
-    public static Queue<NotificationTemplate> getNotificationQueue() {
+    public static Queue<String> getNotificationQueue() {
         return notificationQueue;
     }
 
 
-    public static void addNotification(NotificationTemplate notificationTemplate){
+    public static void addNotification(String notificationTemplate){
         notificationQueue.add(notificationTemplate);
     }
 
-    public static NotificationTemplate getNotification(){
+    public static String getNotification(){
         return notificationQueue.poll();
+    }
+    public static void popQueue(){
+        if(notificationQueue.isEmpty())
+            return;
+        notificationQueue.poll();
     }
 
 

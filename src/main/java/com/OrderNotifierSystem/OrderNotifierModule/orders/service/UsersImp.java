@@ -22,7 +22,7 @@ public class UsersImp {
                         "balance: " + user.getBalance() + "\n" +
                         "phone: " + user.getPhone() + "\n";
             }
-            return "User not found";
+                continue;
         }
         return "User not found";
     }

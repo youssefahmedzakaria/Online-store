@@ -4,7 +4,11 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.OrderDB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.UserDB;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.service.UsersImp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NotificationTemplate {
+   public static Map<String,Integer> notificationMap = new HashMap<String,Integer>();
     protected static NotificationTemplate notificationTemplate = new NotificationTemplate();
 
     public static UsersImp getUsersBSL() {

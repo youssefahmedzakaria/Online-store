@@ -20,22 +20,25 @@ public class ShoppingCartImp {
     public String addToCart(String username, String productName, int Quantity) {
         Product product = productBSL.findProduct(productName);
         UsersImp usersImp = new UsersImp();
-        usersImp.getUser(username);
-        if (product != null) {
-            if (product.getQuantity() >= Quantity) {
-                if (usersImp.getUser(username).getShoppingCart().shoppingCart.getCart() == null) {
-                    usersImp.getUser(username).getShoppingCart().shoppingCart.setTotalCost((float) (product.getPrice() * Quantity));
-                    product.setQuantity(product.getQuantity() - Quantity);
+        if(usersImp.getUser(username) != null) {
+            if (product != null) {
+                if (product.getQuantity() >= Quantity) {
+                    if (usersImp.getUser(username).getShoppingCart().shoppingCart.getCart() == null) {
+                        usersImp.getUser(username).getShoppingCart().shoppingCart.setTotalCost((float) (product.getPrice() * Quantity));
+                        product.setQuantity(product.getQuantity() - Quantity);
+                    } else {
+                        usersImp.getUser(username).getShoppingCart().shoppingCart.setTotalCost((float) (usersImp.getUser(username).getShoppingCart().shoppingCart.getTotalCost() + product.getPrice() * Quantity));
+                        product.setQuantity(product.getQuantity() - Quantity);
+                        usersImp.getUser(username).getShoppingCart().shoppingCart.setQuantity(usersImp.getUser(username).getShoppingCart().shoppingCart.getQuantity() + Quantity);
+                    }
                 } else {
-                    usersImp.getUser(username).getShoppingCart().shoppingCart.setTotalCost((float) (usersImp.getUser(username).getShoppingCart().shoppingCart.getTotalCost() + product.getPrice() * Quantity));
-                    product.setQuantity(product.getQuantity() - Quantity);
-                    usersImp.getUser(username).getShoppingCart().shoppingCart.setQuantity(usersImp.getUser(username).getShoppingCart().shoppingCart.getQuantity() + Quantity);
+                    return "Quantity not available";
                 }
-            } else {
-                return "Quantity not available";
-            }
-        } else {
-            return "Product not found";
+            } else
+                return "Product not found";
+        }
+        else{
+            return "User not found";
         }
         Product cartProduct = new Product(product.getName(), Quantity, product.getPrice());
         usersImp.getUser(username).getShoppingCart().shoppingCart.getCart().add(cartProduct);

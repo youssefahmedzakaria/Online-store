@@ -3,6 +3,7 @@ import com.OrderNotifierSystem.OrderNotifierModule.orders.model.User;
 
 public class OrderPlacementTemplate extends NotificationTemplate {
 
+    public String OrderPlaceMent= "OrderPlacement";
     public String orderPlacementMessage(String username) {
         User user = usersBSL.getUser(username);
         notificationTemplate.setSubject("Order Placement");
@@ -11,12 +12,16 @@ public class OrderPlacementTemplate extends NotificationTemplate {
                 " has been placed.\n" +
                 "Your balance is " + user.getBalance() + ".\n" +
                 "Thank you for shopping with us.");
+        notificationMap.put(OrderPlaceMent,notificationMap.get(OrderPlaceMent)+1);
+        NotificationsQueue.addNotification(notificationTemplate.getContent());
         return notificationTemplate.getContent();
     }
 
     public String sendOrderPlacementByEmail(String username, String email){
         User user = usersBSL.getUser(username);
         if(user.getEmail().equals(email)){
+            notificationMap.put(OrderPlaceMent,notificationMap.get(OrderPlaceMent)+1);
+            NotificationsQueue.addNotification(notificationTemplate.getContent());
             return "Sending Notification to email: " + email + "/n" + orderPlacementMessage(username);
         }
         return "Email does not match";
@@ -24,6 +29,8 @@ public class OrderPlacementTemplate extends NotificationTemplate {
     public String sendOrderPlacementBySMS(String username, String phone){
         User user = usersBSL.getUser(username);
         if(user.getPhone().equals(phone)){
+            notificationMap.put(OrderPlaceMent,notificationMap.get(OrderPlaceMent)+1);
+          //  NotificationsQueue.addNotification(notificationTemplate.getContent());
             return "Sending Notification to phone: " + phone + "/n" + orderPlacementMessage(username);
         }
         return "Phone does not match";
@@ -37,20 +44,30 @@ public class OrderPlacementTemplate extends NotificationTemplate {
                 "تم تأكيد طلبك.\n" +
                 "رصيدك هو " + user.getBalance() + ".\n" +
                 "شكرا لتسوقك معنا.");
+        notificationMap.put(OrderPlaceMent,notificationMap.get(OrderPlaceMent)+1);
+        NotificationsQueue.addNotification(notificationTemplate.getContent());
         return notificationTemplate.getContent();
     }
 
     public String sendOrderPlacementByEmailArabic(String username, String email){
-        User user = usersBSL.getUser(username);
-        if(user.getEmail().equals(email)){
-            return "تم ارسال بريد الكتروني الى: " + email + "/n" + orderPlacementMessageArabic(username);
+        for (User user : usersBSL.getUsers()) {
+            if (user.getUsername().equals(username)) {
+                if(user.getEmail().equals(email)){
+                    notificationMap.put(OrderPlaceMent,notificationMap.get(OrderPlaceMent)+1);
+                    NotificationsQueue.addNotification(notificationTemplate.getContent());
+                    return "تم ارسال بريد الكتروني الى: " + email + "/n" + orderPlacementMessageArabic(username);
+                }
+                return "الايميل غير متطابق";
+            }
         }
-        return "الايميل غير متطابق";
+        return "المستخدم غير موجود";
     }
 
     public String sendOrderPlacementBySMSArabic(String username, String phone){
         User user = usersBSL.getUser(username);
         if(user.getPhone().equals(phone)){
+            notificationMap.put(OrderPlaceMent,notificationMap.get(OrderPlaceMent)+1);
+            NotificationsQueue.addNotification(notificationTemplate.getContent());
             return "تم ارسال رسالة نصية الى: " + phone + "/n" + orderPlacementMessageArabic(username);
         }
         return "رقم الهاتف غير متطابق";
