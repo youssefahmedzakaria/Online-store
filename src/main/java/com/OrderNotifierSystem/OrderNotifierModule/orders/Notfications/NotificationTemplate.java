@@ -37,4 +37,17 @@ public class NotificationTemplate {
     }
 
     private String content;
+
+    public String maxNotification(){
+        int max = 0;
+        String maxNotification = "";
+        for (Map.Entry<String, Integer> entry : notificationMap.entrySet()) {
+            if (entry.getValue() > max) {
+                max = entry.getValue();
+                maxNotification = entry.getKey();
+            }
+        }
+        return maxNotification;
+    }
+
 }
