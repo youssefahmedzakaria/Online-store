@@ -46,7 +46,7 @@ public class ShoppingCartImp {
             return null;
         }
         ArrayList<String> cartProducts = new ArrayList<>();
-        for (Product product : user.getUser(username).getShoppingCart().getCart()) {
+        for (Product product : user.getUser(username).getShoppingCart().shoppingCart.cart) {
             String cartProduct = product.getName() + " x " + product.getQuantity() + " = $" + product.getPrice() * product.getQuantity();
             cartProducts.add(cartProduct);
         }
@@ -59,11 +59,11 @@ public class ShoppingCartImp {
         }
         Product product = productBSL.findProduct(productName);
         if (product.getName() != null) {
-            for (Product cartProduct : user.getUser(username).getShoppingCart().getCart()) {
+            for (Product cartProduct : user.getUser(username).getShoppingCart().shoppingCart.cart) {
                 if (cartProduct.getName().equals(productName)) {
-                    user.getUser(username).getShoppingCart().setTotalCost((float) (user.getUser(username).getShoppingCart().getTotalCost() - cartProduct.getPrice() * cartProduct.getQuantity()));
+                    user.getUser(username).getShoppingCart().shoppingCart.setTotalCost((float) (user.getUser(username).getShoppingCart().shoppingCart.getTotalCost() - cartProduct.getPrice() * cartProduct.getQuantity()));
                     product.setQuantity(product.getQuantity() + cartProduct.getQuantity());
-                    user.getUser(username).getShoppingCart().getCart().remove(cartProduct);
+                    user.getUser(username).getShoppingCart().shoppingCart.cart.remove(cartProduct);
                     return productName + " removed from cart";
                 }
             }
@@ -81,7 +81,7 @@ public class ShoppingCartImp {
 
 
     public float getTotalCost(String username) {
-        return user.getUser(username).getShoppingCart().getTotalCost();
+        return user.getUser(username).getShoppingCart().shoppingCart.getTotalCost();
     }
 
     public UsersImp getUserImp() {

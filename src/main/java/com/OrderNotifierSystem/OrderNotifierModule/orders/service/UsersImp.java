@@ -10,7 +10,7 @@ import java.util.*;
 
 @Service
 public class UsersImp {
-    private final UserDB users = new UserDB();
+    private static UserDB users = new UserDB();
 
 
 

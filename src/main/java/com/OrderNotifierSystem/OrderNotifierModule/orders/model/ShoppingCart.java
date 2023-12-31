@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class ShoppingCart {
     public ArrayList<Product> cart = new ArrayList<>();
-    private float totalCost;
+    private float totalCost = 0;
     private int quantity;
 
     public void setCart(ArrayList<Product> cart) {
@@ -14,7 +14,10 @@ public class ShoppingCart {
     public ArrayList<Product> getCart() {
         return cart;
     }
-
+    public boolean isEmpty(){
+        if (cart.isEmpty())return true;
+        return false;
+    }
     public float getTotalCost() {
         return totalCost;
     }

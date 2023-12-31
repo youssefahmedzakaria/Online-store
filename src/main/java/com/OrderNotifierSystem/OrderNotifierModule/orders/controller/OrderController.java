@@ -37,9 +37,9 @@ public class OrderController {
         return orderBSL.getOrders();
     }
 
-    @GetMapping("/getOrder/{orderId}")
-    public ArrayList<String> getOrder(@PathVariable("orderId") int orderId) {
-        return orderBSL.getOrder(orderId);
+    @GetMapping("/getOrder/{orderId}/{username}")
+    public ArrayList<String> getOrder(@PathVariable("orderId") int orderId, @PathVariable("username") String username) {
+        return orderBSL.getOrder(orderId,username);
     }
 
     @GetMapping("/checkout/{username}/{orderId}")

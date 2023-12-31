@@ -11,21 +11,20 @@ public class Order {
     private LocalDateTime placementTime;
 
     // Constructor and other methods
-
+    static int counter = 1;
     private boolean isPlaced = false;
 
     private boolean isShipped = false;
     private int orderId = 0;
     private int compoundOrderId = 0;
     Boolean orderStatus = false;
-
     private int shippingFees = 15;
-
     private final static User user = new User();
-
-
     private final static ShoppingCartImp shoppingCartBSL = new ShoppingCartImp();
+
     public Order() {
+        orderId = counter;
+        counter++;
     }
     public boolean getShipped() {
         return isShipped;

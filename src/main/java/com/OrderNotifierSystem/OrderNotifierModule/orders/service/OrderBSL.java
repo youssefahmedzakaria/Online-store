@@ -1,6 +1,7 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.service;
 
 import com.OrderNotifierSystem.OrderNotifierModule.orders.DB.OrderDB;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.controller.ShoppingCartController;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Order;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.Product;
 import com.OrderNotifierSystem.OrderNotifierModule.orders.model.SimpleOrder;
@@ -15,37 +16,43 @@ import java.util.ArrayList;
 
 @Component
 public class OrderBSL {
+    static int counter = 1;
     private static final int CANCELLATION_DURATION_LIMIT = 2;
 
-    private final OrderDB orderDB = new OrderDB();
+    private OrderDB orderDB = new OrderDB();
     private  UsersImp userImp = new UsersImp();
-    private final Order order = new Order();
+
     public void CopyList(ArrayList<Product> list1, ArrayList<Product> list2) {
         for (Product product : list1) {
             list2.add(product);
         }
     }
     public String placeOrder(String username) {
-        orderDB.getOrderedProducts().clear();
+        Order order = new Order();
         if (userImp.checkUser(username)) {
-            CopyList(order.getShoppingCartBSL().getUserImp().getUser(username).getShoppingCart().getCart(), orderDB.getOrderedProducts());
-            if (order.getShoppingCartBSL().getUserImp().getUser(username).getShoppingCart().getCart().isEmpty()) {
+//            User user = imp.getUser(username);
+            ShoppingCartController shoppingCartController = new ShoppingCartController();
+            if (userImp.getUser(username).getShoppingCart().shoppingCart.cart.isEmpty()) {
                 return "Cart is empty";
             }
-            order.setOrderId(order.getOrderId() + 1);
+            order.setOrderId(counter++);
+//            userImp.getUser(username).getCurrentorder().setOrderId(counter++);
             order.setStatus(true);
-            orderDB.getOrders().add(order);
             order.setPlaced(true);
+            userImp.getUser(username).setCurrentorder(order);
+
+            orderDB.getOrders().add(order);
             userImp.getUser(username).getOrders().add(order);
-            userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() - order.getShoppingCartBSL().getUserImp().getUser(username).getShoppingCart().getTotalCost());
-            OrderDB.getOrderTotalCost().put(order.getOrderId(), order.getShoppingCartBSL().getUserImp().getUser(username).getShoppingCart().getTotalCost());
-            order.getShoppingCartBSL().getUserImp().getUser(username).getShoppingCart().getCart().clear();
-            return "Order placed successfully \n " + "Your Order ID is: " + order.getOrderId();
+            userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() - userImp.getUser(username).getShoppingCart().shoppingCart.getTotalCost());
+            OrderDB.getOrderTotalCost().put(userImp.getUser(username).getCurrentorder().getOrderId(), userImp.getUser(username).getShoppingCart().shoppingCart.getTotalCost());
+            userImp.getUser(username).getShoppingCart().shoppingCart.cart.clear();
+            return "Order placed successfully \n " + "Your Order ID is: " + userImp.getUser(username).getCurrentorder().getOrderId();
         }
         return "User not found";
     }
 
     public String placeOrders(ArrayList<String> usernames) {
+        Order order = new Order();
         for (String username : usernames) {
             if(placeOrder(username).equals("Cart is empty")) {
                 return "Cart is empty";
@@ -73,12 +80,13 @@ public class OrderBSL {
     }
 
     public String cancelOrderPlacement(String username, int orderId) {
+        Order order = new Order();
         if (userImp.checkUser(username)) {
             if (order.getPlaced()) {
                 if (orderDB.findOrder(orderId)) {
                     order.setPlaced(false);
                     orderDB.getOrderMap().remove(orderId, orderDB.getOrderMap().get(orderId));
-                    for (Product product : orderDB.getOrderedProducts()) {
+                    for (Product product : userImp.getUser(username).getShoppingCart().shoppingCart.cart) {
                         order.getShoppingCartBSL().removeFromCart(username,product.getName());
                     }
                     order.setStatus(false);
@@ -93,6 +101,7 @@ public class OrderBSL {
     }
 
     public String shipOrder(String username, int orderId) {
+        Order order = new Order();
         if (userImp.checkUser(username)) {
             if (order.getPlaced()) {
                 if (orderDB.findOrder(orderId)) {
@@ -109,6 +118,7 @@ public class OrderBSL {
 
 
     public String cancelOrderShipping(String username, int orderId) {
+        Order order = new Order();
         if (userImp.checkUser(username)) {
             if (order.getShipped()) {
                 if (orderDB.findOrder(orderId)) {
@@ -130,7 +140,8 @@ public class OrderBSL {
         return "User not found";
     }
 
-    public ArrayList<String> getOrder(int orderId) {
+    public ArrayList<String> getOrder(int orderId, String username) {
+        Order order = new Order();
         if (!order.getStatus()) {
             return null;
         }
@@ -140,7 +151,7 @@ public class OrderBSL {
         }
         orderDetails = new ArrayList<>();
         if (orderDB.findOrder(orderId)) {
-            for (Product product : orderDB.getOrderedProducts()) {
+            for (Product product : userImp.getUser(username).getShoppingCart().shoppingCart.cart) {
                 String orderProduct = "Product Details: " + product.getName() + " x " + product.getQuantity() + " = $" + (product.getPrice() * product.getQuantity());
                 orderDetails.add(orderProduct);
             }
@@ -160,10 +171,9 @@ public class OrderBSL {
         }
 
         for (Order order : userImp.getUser(username).getOrders()) {
-            if (order.getOrderId() == orderId) {
                     String cost = String.valueOf(orderDB.getOrderTotalCost().get(orderId) + order.getShippingFees());
-                    return "Total Cost: " + "$" + cost;
-                }
+                    return "Total Cost: " + "$" + cost +"    " + order.getOrderId();
+
             }
 
         return "Order not placed yet";
