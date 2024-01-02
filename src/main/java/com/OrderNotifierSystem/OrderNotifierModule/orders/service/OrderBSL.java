@@ -61,7 +61,7 @@ public class OrderBSL {
 
     public String placeOrders(ArrayList<String> usernames) {
         Order order = new Order();
-       // OrderPlacementTemplate placementNotification = new OrderPlacementTemplate();
+        OrderPlacementTemplate placementNotification = new OrderPlacementTemplate();
         Float TotalCost = 0f;
         ArrayList<Order> individualOrders = new ArrayList<>();
         for (String username : usernames) {
@@ -71,7 +71,7 @@ public class OrderBSL {
                 return "User not found";
             }
 
-         //   placementNotification.sendOrderPlacementBySMS(username, userImp.getUser(username).getPhone());
+            placementNotification.sendOrderPlacementBySMS(username, userImp.getUser(username).getPhone());
             Order individualOrder = userImp.getUser(username).getCurrentorder();
             individualOrders.add(individualOrder);
             TotalCost += OrderDB.getOrderTotalCost().get(individualOrder.getOrderId());
@@ -84,11 +84,11 @@ public class OrderBSL {
     }
 
     public String CancelOrdersPlacements(int compoundOrderId){
-        //CancelPlacementTemplate cancelPlacementNotification = new CancelPlacementTemplate();
+        CancelPlacementTemplate cancelPlacementNotification = new CancelPlacementTemplate();
         if(orderDB.findCompoundOrder(compoundOrderId)) {
             for (Order order : orderDB.getCompoundOrders().get(compoundOrderId)) {
                 cancelOrderPlacement(order.getUser().getUsername(), order.getOrderId());
-          //      cancelPlacementNotification.sendCancelPlacementBySMS(order.getUser().getUsername(), order.getUser().getPhone());
+                cancelPlacementNotification.sendCancelPlacementBySMS(order.getUser().getUsername(), order.getUser().getPhone());
             }
 
             return "Compound Order Cancelled";
@@ -112,7 +112,7 @@ public class OrderBSL {
 
     public String cancelOrderPlacement(String username, int orderId) {
         if (userImp.checkUser(username)) {
-            //CancelPlacementTemplate cancelPlacementNotification = new CancelPlacementTemplate();
+            CancelPlacementTemplate cancelPlacementNotification = new CancelPlacementTemplate();
             for (Order order : orderDB.getOrders()) {
                 if (orderDB.findOrder(orderId)) {
                     if (order.getPlaced()) {
@@ -124,7 +124,7 @@ public class OrderBSL {
                         order.setStatus(false);
                         // set the user's balance to the previous balance
                         userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + OrderDB.getOrderTotalCost().get(orderId));
-                     //   cancelPlacementNotification.sendCancelPlacementBySMS(username, userImp.getUser(username).getPhone());
+                        cancelPlacementNotification.sendCancelPlacementBySMS(username, userImp.getUser(username).getPhone());
                         return "Order Cancelled";
                     }
                 }
@@ -190,7 +190,7 @@ public class OrderBSL {
 
     public String cancelOrderShipping(String username, int orderId) {
         Order order = new Order();
-        //CancelShipmentTemplate cancelShipmentNotification = new CancelShipmentTemplate();
+        CancelShipmentTemplate cancelShipmentNotification = new CancelShipmentTemplate();
         if (userImp.checkUser(username)) {
             if (order.getShipped()) {
                 if (orderDB.findOrder(orderId)) {
@@ -200,7 +200,7 @@ public class OrderBSL {
                     if (duration.toMinutes() <= CANCELLATION_DURATION_LIMIT) {
                         order.setShipped(false);
                         userImp.getUser(username).setBalance(userImp.getUser(username).getBalance() + order.getShippingFees());
-          //              cancelShipmentNotification.sendCancelShipmentBySMS(username, userImp.getUser(username).getPhone());
+                        cancelShipmentNotification.sendCancelShipmentBySMS(username, userImp.getUser(username).getPhone());
                         return "Shipping Cancelled";
                     } else {
                         return "Shipment Cancellation period has expired";

@@ -1,13 +1,9 @@
 package com.OrderNotifierSystem.OrderNotifierModule.orders.controller;
 
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.CancelPlacementTemplate;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.CancelShipmentTemplate;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.OrderPlacementTemplate;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.OrderShipmentTemplate;
+import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import com.OrderNotifierSystem.OrderNotifierModule.orders.Notfications.NotificationsQueue;
 
 
 @RestController
@@ -16,6 +12,8 @@ public class NotificationController {
     private CancelPlacementTemplate cancelPlacementTemplate;
     private OrderPlacementTemplate orderPlacementTemplate;
     private OrderShipmentTemplate orderShipmentTemplate;
+
+    private NotificationTemplate notificationTemplate = new NotificationTemplate();
 
     public NotificationController() {
         cancelShipmentTemplate = new CancelShipmentTemplate();
@@ -103,5 +101,10 @@ public class NotificationController {
     @GetMapping("/sendCancelShipmentNotificationSmsEn/{username}/{phoneNumber}")
     public String sendCancelShipmentByEmailAndSMSEn(@PathVariable("username") String username, @PathVariable("phoneNumber") String phoneNumber) {
         return cancelShipmentTemplate.sendCancelShipmentBySMS(username, phoneNumber);
+    }
+
+    @GetMapping("/getMostUsedTemplate")
+    public String getMostUsedTemplate() {
+        return notificationTemplate.maxNotification();
     }
 }
